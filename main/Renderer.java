@@ -4,6 +4,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 
 class Renderer implements GLEventListener {
 	private GLU glu = new GLU();
@@ -11,21 +12,28 @@ class Renderer implements GLEventListener {
 	public void display(GLAutoDrawable gLDrawable) {
 		final GL2 gl = gLDrawable.getGL().getGL2();
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
-		gl.glLoadIdentity();
-		gl.glTranslatef(-1.5f, 0.0f, -6.0f);
+		gl.glLoadIdentity(); // Set matrix to the right state (1)
+		
+//
+//		GLUquadric quad = glu.gluNewQuadric();
+//		glu.gluSphere(quad, 2, 10, 15);
+//		glu.gluDeleteQuadric(quad);
+		
+	
+		gl.glTranslatef(0.0f, 0.0f, -5.0f);
 		gl.glBegin(GL2.GL_TRIANGLES);
-		gl.glVertex3f(0.0f, 1.0f, 0.0f);
+		gl.glVertex3f(0.0f, 2.0f, 0.0f);
 		gl.glVertex3f(-1.0f, -1.0f, 0.0f);
 		gl.glVertex3f(1.0f, -1.0f, 0.0f);
 		gl.glEnd();
-		gl.glTranslatef(3.0f, 0.0f, 0.0f);
-		gl.glBegin(GL2.GL_QUADS);
-		gl.glVertex3f(-1.0f, 1.0f, 0.0f);
-		gl.glVertex3f(1.0f, 1.0f, 0.0f);
-		gl.glVertex3f(1.0f, -1.0f, 0.0f);
-		gl.glVertex3f(-1.0f, -1.0f, 0.0f);
-		gl.glEnd();
-		gl.glFlush();
+		//gl.glTranslatef(3.0f, 0.0f, 0.0f);
+//		gl.glBegin(GL2.GL_QUADS);
+//		gl.glVertex3f(-1.0f, 1.0f, 0.0f);
+//		gl.glVertex3f(1.0f, 1.0f, 0.0f);
+//		gl.glVertex3f(1.0f, -1.0f, 0.0f);
+//		gl.glVertex3f(-1.0f, -1.0f, 0.0f);
+//		gl.glEnd();
+//		gl.glFlush();
 	}
 
 	public void displayChanged(GLAutoDrawable gLDrawable, boolean modeChanged, boolean deviceChanged) {
