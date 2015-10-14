@@ -9,6 +9,10 @@ import com.jogamp.opengl.awt.GLCanvas;
 import javax.swing.JFrame;
 
 public class Main {
+
+	public static int canvasHeight = 800;
+	public static int canvasWidth = 600;
+
 	public static void main(String[] args) {
 		// setup OpenGL Version 2
 		GLProfile profile = GLProfile.get(GLProfile.GL2);
@@ -17,7 +21,7 @@ public class Main {
 		// The canvas is the widget that's drawn in the JFrame
 		GLCanvas glcanvas = new GLCanvas(capabilities);
 		glcanvas.addGLEventListener(new Renderer());
-		glcanvas.setSize(300, 300);
+		glcanvas.setSize(canvasHeight, canvasWidth);
 
 		JFrame frame = new JFrame("Hello World");
 		frame.getContentPane().add(glcanvas);
