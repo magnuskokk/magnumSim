@@ -11,7 +11,7 @@ import com.jogamp.opengl.glu.GLU;
  * JOGL 2.0 Example 2: Rotating 3D Shapes (GLCanvas)
  */
 // @SuppressWarnings("serial")
-public class Rotate extends GLCanvas implements GLEventListener {
+public class MainCanvas extends GLCanvas implements GLEventListener {
 	/**
 	 * 
 	 */
@@ -22,11 +22,11 @@ public class Rotate extends GLCanvas implements GLEventListener {
 	private GLU glu; // for the GL Utility
 	private float anglePyramid = 0; // rotational angle in degree for pyramid
 	private float angleCube = 0; // rotational angle in degree for cube
-	private float speedPyramid = 2.0f; // rotational speed for pyramid
+	private float speedPyramid = 1f; // rotational speed for pyramid
 	private float speedCube = -1.5f; // rotational speed for cube
 
 	/** Constructor to setup the GUI for this Component */
-	public Rotate() {
+	public MainCanvas() {
 		this.addGLEventListener(this);
 	}
 

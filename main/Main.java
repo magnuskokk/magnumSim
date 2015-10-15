@@ -25,7 +25,7 @@ public class Main {
 			@Override
 			public void run() {
 				// Create the OpenGL rendering canvas
-				GLCanvas canvas = new Rotate();
+				GLCanvas canvas = new MainCanvas();
 				canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
 
 				// Create a animator that drives canvas' display() at the
