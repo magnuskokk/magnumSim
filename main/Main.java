@@ -1,6 +1,5 @@
 package main;
 
-import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -17,6 +16,8 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.FPSAnimator;
+
+import view.Camera;
 
 public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
@@ -118,7 +119,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glEnable(GL2.GL_NORMALIZE);
 
 		camera = new Camera();
-
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -144,10 +144,9 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		GLU glu = new GLU(); // needed for lookat
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
-		glu.gluLookAt(20.0, 20.0, 20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 
-
-
+		camera.lookAt(glu);
+		
 		// draw planets
 		drawPlanets(gl);
 		gl.glFlush();
@@ -205,7 +204,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glPopMatrix(); // sun
 	}
 
-
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
 	}
 
@@ -245,7 +243,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		int notches = e.getWheelRotation();
-		
+
 		if (notches < 0) {
 			camera.zoomIn();
 		} else {
