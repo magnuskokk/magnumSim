@@ -7,7 +7,7 @@ import com.jogamp.opengl.GL2;
  */
 public class someMaterials {
 
-  static void SetMaterialGoldenSun(GL2 gl)
+  static void setMaterialGoldenSun(GL2 gl)
     {
         float amb[]={0.24725f, 0.1995f, 0.0745f,1.0f};
         float diff[]={0.75164f, 0.60648f, 0.22648f,1.0f};

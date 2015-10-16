@@ -5,6 +5,8 @@ import java.awt.Frame;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -16,7 +18,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.FPSAnimator;
 
-public class Main implements GLEventListener, MouseListener, MouseMotionListener {
+public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
@@ -28,6 +30,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		// I have no idea how these mouselisteners work that way :D
 		canvas.addMouseListener((MouseListener) listener);
 		canvas.addMouseMotionListener((MouseMotionListener) listener);
+		canvas.addMouseWheelListener((MouseWheelListener) listener);
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
@@ -68,7 +71,9 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	public float dayofyear = 0f;
 	public float dayofmonth = 10f;
 
-	private FPSAnimator m_animator = null;;
+	private FPSAnimator m_animator = null;
+
+	public Camera camera = null;
 
 	public Main(FPSAnimator animator) {
 		m_animator = animator;
@@ -112,6 +117,8 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		gl.glEnable(GL2.GL_NORMALIZE);
 
+		camera = new Camera();
+
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -138,12 +145,8 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 		glu.gluLookAt(20.0, 20.0, 20.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-		// rotate around x-axis
-		gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
-		// rotate around z-axis
-		gl.glRotatef(view_roty, 0.0f, 0.0f, 1.0f);
 
-		//
+
 
 		// draw planets
 		drawPlanets(gl);
@@ -162,19 +165,24 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		dayofmonth = (dayofmonth + (clocktick / 24f)) % 28f;
 		dayofyear = (dayofyear + (clocktick / 24f)) % 365f;
 
-		System.out.println("Day: " + angleDay + " Month: " + angleMonth + " Year: " + angleYear);// ddd
+		// System.out.println("Day: " + angleDay + " Month: " + angleMonth + "
+		// Year: " + angleYear);// ddd
 
 		GLU glu = new GLU(); // needed for lookat
 		GLUquadric glpQ = glu.gluNewQuadric();
 
 		gl.glPushMatrix();
 		{
+			someMaterials.setMaterialGoldenSun(gl);
+
 			// Sun
 			gl.glColor4f(1f, 1f, 1f, 1f);
 			glu.gluSphere(glpQ, 0.8f, 10, 10);
 
 			gl.glPushMatrix();
 			{
+				someMaterials.setMaterialGreenPlanet(gl);
+
 				// Planet 1
 				gl.glRotatef(angleYear, 0.0f, 1.0f, 0.0f);
 				gl.glTranslatef(3.0f, 0.0f, 0.0f);
@@ -197,14 +205,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glPopMatrix(); // sun
 	}
 
-	public void pilotView(GL2 gl, float x, float y, float z, float roll, float pitch, float heading) {
-
-		gl.glRotatef(roll, 0.0f, 0.0f, 1.0f);
-		gl.glRotatef(pitch, 0.0f, 1.0f, 0.0f);
-		gl.glRotatef(heading, 1.0f, 0.0f, 0.0f);
-		gl.glTranslatef(-x, -y, -z);
-	}
-	// eofplanets
 
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
 	}
@@ -223,9 +223,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mousePressed(MouseEvent e) {
-
-		System.out.println("mousePressed");
-
 		if (e.getButton() == MouseEvent.BUTTON3) {
 			if (m_animator.isAnimating())
 				m_animator.stop();
@@ -237,19 +234,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
-		int x = e.getX();
-		int y = e.getY();
-		Dimension size = e.getComponent().getSize();
-
-		float thetaY = 360.0f * ((float) (x - oldMouseX) / (float) size.width);
-		float thetaX = 360.0f * ((float) (oldMouseY - y) / (float) size.height);
-
-		oldMouseX = x;
-		oldMouseY = y;
-
-		view_rotx += thetaX;
-		view_roty += thetaY;
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -257,8 +241,15 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	@Override
 	public void dispose(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
-
 	}
 
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		int notches = e.getWheelRotation();
+		
+		if (notches < 0) {
+			camera.zoomIn();
+		} else {
+			camera.zoomOut();
+		}
+	}
 }
