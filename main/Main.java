@@ -64,12 +64,9 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	private int oldMouseX;
 	private int oldMouseY;
 
-	private float m_Vx = 0.0f;
-	private float m_Vz = 0.0f;
-	private float m_pV = 0.0f;
-	private float m_mV = 0.0f;
-	private float m_pV2 = 0.0f;
-	private float m_mV2 = 0.0f;
+	public float hourofday = 0f;
+	public float dayofyear = 0f;
+	public float dayofmonth = 10f;
 
 	private FPSAnimator m_animator = null;;
 
@@ -145,6 +142,9 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glRotatef(view_rotx, 1.0f, 0.0f, 0.0f);
 		// rotate around z-axis
 		gl.glRotatef(view_roty, 0.0f, 0.0f, 1.0f);
+
+		//
+
 		// draw planets
 		drawPlanets(gl);
 		gl.glFlush();
@@ -152,48 +152,57 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	// planets
 	public void drawPlanets(GL2 gl) {
-		GLU glu = new GLU(); // spheres
+
+		float angleDay = (hourofday / 24f) * 360f;
+		float angleYear = (dayofyear / 365f) * 360f;
+		float angleMonth = (dayofmonth / 28f) * 360f;
+		// Clocktick (unit is 1 hour): step time.
+		final float clocktick = 24f;
+		hourofday = (hourofday + clocktick) % 24f;
+		dayofmonth = (dayofmonth + (clocktick / 24f)) % 28f;
+		dayofyear = (dayofyear + (clocktick / 24f)) % 365f;
+
+		System.out.println("Day: " + angleDay + " Month: " + angleMonth + " Year: " + angleYear);// ddd
+
+		GLU glu = new GLU(); // needed for lookat
 		GLUquadric glpQ = glu.gluNewQuadric();
-		/** the sun in origo */
-		/** Material of the sun */
-		someMaterials.SetMaterialGoldenSun(gl);
-		/** radius 4 */
-		glu.gluSphere(glpQ, 3.0f, 20, 20);
 
 		gl.glPushMatrix();
+		{
+			// Sun
+			gl.glColor4f(1f, 1f, 1f, 1f);
+			glu.gluSphere(glpQ, 0.8f, 10, 10);
 
-		/** a planet */
-		/** This planets material */
-		someMaterials.setMaterialGreenPlanet(gl);
-		/** in XY-plane */
-		gl.glRotatef(m_pV, 1.0f, 0.0f, 0.0f);
-		/** distance 7 */
-		gl.glTranslatef(1.0f, 10.0f, 1.0f);
-		/** radius 1 */
-		glu.gluSphere(glpQ, 1.0f, 20, 20);
+			gl.glPushMatrix();
+			{
+				// Planet 1
+				gl.glRotatef(angleYear, 0.0f, 1.0f, 0.0f);
+				gl.glTranslatef(3.0f, 0.0f, 0.0f);
+				gl.glColor4f(0f, 1f, 0f, 1f);
+				glu.gluSphere(glpQ, 0.3f, 10, 10);
 
-		/** with its only moon */
-		/** This moons material */
-		someMaterials.setMaterialSilverMoon(gl);
-		/** in YZ-pane (of planet) */
-		gl.glRotatef(m_mV, 1.0f, 0.0f, 0.0f);
-		/** distance 1.5 */
-		gl.glTranslatef(0.0f, 1.5f, 0.0f);
-		/** radius 0.5 */
-		glu.gluSphere(glpQ, 0.5f, 20, 20);
+				// Moon 11
+				gl.glPushMatrix();
+				{
+					gl.glRotatef(angleMonth, 0.0f, 1.0f, 0.0f);
+					gl.glTranslatef(0.8f, 0.0f, 0.0f);
+					glu.gluSphere(glpQ, 0.1f, 10, 10);
+				}
+				gl.glPopMatrix();
 
-		gl.glPopMatrix();
-		gl.glPushMatrix();
+			}
+			gl.glPopMatrix(); // Planet 1
 
-		// increment model movement
+		}
+		gl.glPopMatrix(); // sun
+	}
 
-		m_pV += 0.1f;
-		if (m_pV > 360.0f)
-			m_pV = 0.1f;
-		m_mV += 0.9f;
-		if (m_mV > 360.0f)
-			m_mV = 0.9f;
+	public void pilotView(GL2 gl, float x, float y, float z, float roll, float pitch, float heading) {
 
+		gl.glRotatef(roll, 0.0f, 0.0f, 1.0f);
+		gl.glRotatef(pitch, 0.0f, 1.0f, 0.0f);
+		gl.glRotatef(heading, 1.0f, 0.0f, 0.0f);
+		gl.glTranslatef(-x, -y, -z);
 	}
 	// eofplanets
 
@@ -228,6 +237,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseDragged(MouseEvent e) {
+
 		int x = e.getX();
 		int y = e.getY();
 		Dimension size = e.getComponent().getSize();
