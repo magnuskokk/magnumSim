@@ -2,10 +2,12 @@ package view;
 
 import com.jogamp.opengl.glu.GLU;
 
+import model.Vector3D;
+
 public class Camera {
 
 	private double eyeX, eyeY, eyeZ, centerX, centerY, centerZ;
-
+	
 	public Camera() {
 		eyeX = 0.0f;
 		eyeY = 20.0f;
@@ -45,6 +47,6 @@ public class Camera {
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerX, 0.0, 0.0, 1.0);
+		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, 0.0, 0.0, 1.0);
 	}
 }
