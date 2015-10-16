@@ -23,7 +23,13 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		GLCanvas canvas = new GLCanvas();
 		final FPSAnimator animator = new FPSAnimator(canvas, 100);
 
-		canvas.addGLEventListener(new Main(animator));
+		GLEventListener listener = new Main(animator);
+
+		// I have no idea how these mouselisteners work that way :D
+		canvas.addMouseListener((MouseListener) listener);
+		canvas.addMouseMotionListener((MouseMotionListener) listener);
+
+		canvas.addGLEventListener(listener);
 		frame.add(canvas);
 		frame.setSize(800, 600);
 
@@ -109,8 +115,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		gl.glEnable(GL2.GL_NORMALIZE);
 
-		// drawable.addGLEventListener(this);
-		// drawable.addMouseMotionListener(this);
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -164,7 +168,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		/** in XY-plane */
 		gl.glRotatef(m_pV, 1.0f, 0.0f, 0.0f);
 		/** distance 7 */
-		gl.glTranslatef(0.0f, 7.0f, 0.0f);
+		gl.glTranslatef(1.0f, 10.0f, 1.0f);
 		/** radius 1 */
 		glu.gluSphere(glpQ, 1.0f, 20, 20);
 
@@ -181,62 +185,15 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glPopMatrix();
 		gl.glPushMatrix();
 
-		/** another planet */
-		/** This planets material */
-		someMaterials.setMaterialObsidianPlanet(gl);
-		/** in XZ-plane */
-		gl.glRotatef(m_pV2, 0.0f, 1.0f, 0.0f);
-		/** distance 10 */
-		gl.glTranslatef(10.0f, 0.0f, 0.0f);
-		/** radius 1 */
-		glu.gluSphere(glpQ, 1.0f, 20, 20);
-
-		gl.glPushMatrix();
-
-		/** with its first moon */
-		/** These moons material */
-		someMaterials.setMaterialWhiteMoon(gl);
-		/** in XZ-pane (of planet) */
-		gl.glRotatef(m_mV2, 0.0f, 1.0f, 0.0f);
-		/** distance 3 */
-		gl.glTranslatef(3.0f, 0.0f, 0.0f);
-		/** radius 0.5 */
-		glu.gluSphere(glpQ, 0.5f, 20, 20);
-
-		gl.glPopMatrix();
-		gl.glPushMatrix();
-
-		/** and second moon */
-		/** in XY-pane (of planet) */
-		gl.glRotatef(m_mV2, 0.0f, 0.0f, 1.0f);
-		/** distance 2 */
-		gl.glTranslatef(2.0f, 0.0f, 0.0f);
-		/** radius 0.5 */
-		glu.gluSphere(glpQ, 0.5f, 20, 20);
-
-		gl.glPopMatrix();
-
-		gl.glPopMatrix();
-		glu.gluDeleteQuadric(glpQ);
 		// increment model movement
-		m_Vz += 0.5f;
-		if (m_Vz > 360.0f)
-			m_Vz = 0.5f;
-		m_Vx += 0.1f;
-		if (m_Vx > 360.0f)
-			m_Vx = 0.1f;
+
 		m_pV += 0.1f;
 		if (m_pV > 360.0f)
 			m_pV = 0.1f;
 		m_mV += 0.9f;
 		if (m_mV > 360.0f)
 			m_mV = 0.9f;
-		m_pV2 += 0.2f;
-		if (m_pV2 > 360.0f)
-			m_pV2 = 0.2f;
-		m_mV2 += 0.9f;
-		if (m_mV2 > 360.0f)
-			m_mV2 = 0.0f;
+
 	}
 	// eofplanets
 
