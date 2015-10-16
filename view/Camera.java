@@ -4,24 +4,47 @@ import com.jogamp.opengl.glu.GLU;
 
 public class Camera {
 
-	private float eyeX, eyeY, eyeZ;
+	private double eyeX, eyeY, eyeZ, centerX, centerY, centerZ;
 
 	public Camera() {
-		this.eyeX = 0.0f;
-		this.eyeY = 20.0f;
-		this.eyeZ = 0.0f;
+		eyeX = 0.0f;
+		eyeY = 20.0f;
+		eyeZ = 0.0f;
+
+		centerX = 0.0f;
+		centerY = 0.0f;
+		centerZ = 0.0f;
+	}
+
+	public void moveUp() {
+
+	}
+
+	public void moveDown() {
+
+	}
+
+	public void moveLeft() {
+
+	}
+
+	public void moveRight() {
+
 	}
 
 	public void zoomIn() {
-		this.eyeY--;
+		eyeX *= 0.9f;
+		eyeY *= 0.9f;
+		eyeZ *= 0.9f;
 	}
 
 	public void zoomOut() {
-		this.eyeY++;
+		eyeX *= 1.1f;
+		eyeY *= 1.1f;
+		eyeZ *= 1.1f;
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(eyeX, eyeY, eyeZ, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-
+		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerX, 0.0, 0.0, 1.0);
 	}
 }

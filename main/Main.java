@@ -232,6 +232,23 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseDragged(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		
+		if (x > oldMouseX) {
+			camera.moveRight();
+		} else {
+			camera.moveLeft();
+		}
+		
+		if (y > oldMouseY) {
+			camera.moveUp();
+		} else {
+			camera.moveDown();
+		}
+
+		oldMouseX = e.getX();
+		oldMouseY = e.getY();	
 	}
 
 	public void mouseMoved(MouseEvent e) {
