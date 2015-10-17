@@ -35,18 +35,18 @@ public class Camera {
 	}
 
 	public void zoomIn() {
-		eyeX *= 0.9f;
-		eyeY *= 0.9f;
-		eyeZ *= 0.9f;
+		this.eyeX *= 0.9f;
+		this.eyeY *= 0.9f;
+		this.eyeZ *= 0.9f;
 	}
 
 	public void zoomOut() {
-		eyeX *= 1.1f;
-		eyeY *= 1.1f;
-		eyeZ *= 1.1f;
+		this.eyeX *= 1.1f;
+		this.eyeY *= 1.1f;
+		this.eyeZ *= 1.1f;
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, 0.0, 0.0, 1.0);
+		glu.gluLookAt(this.eyeX, this.eyeY, this.eyeZ, this.centerX, this.centerY, this.centerZ, 0.0, 0.0, 1.0);
 	}
 }
