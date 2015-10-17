@@ -12,12 +12,11 @@ public class Camera {
 	private Vector3D vector;
 
 	public Camera() {
-
-		this.eye = new Point3D(0.0f, 20.0f, 0.0f);
-		this.center = new Point3D(0.0f, 0.0f, 0.0f);
+		eye = new Point3D(0.0f, 20.0f, 0.0f);
+		center = new Point3D(0.0f, 0.0f, 0.0f);
 
 		// This is the camera vector
-		this.vector = new Vector3D(this.center, this.eye);
+		vector = new Vector3D(center, eye);
 	}
 
 	public void moveForward() {
@@ -61,20 +60,15 @@ public class Camera {
 
 	public void zoomIn() {
 		// Make the vector shorter, so the camera moves closer
-		this.vector.multiply(0.9f);
+		vector.multiply(0.9f);
 	}
 
 	public void zoomOut() {
 		// Make the vector longer, so the camera moves further
-		this.vector.multiply(1.1f);
+		vector.multiply(1.1f);
 	}
 
 	public void lookAt(GLU glu) {
-		// System.out.println(this.vector.begin);
-		// System.exit(0);
-
-		glu.gluLookAt(this.vector.end.x, this.vector.end.y, this.vector.end.z, this.vector.begin.x, this.vector.begin.y,
-				this.vector.begin.z, 0.0, 0.0, 1.0);
-
+		glu.gluLookAt(vector.end.x, vector.end.y, vector.end.z, vector.begin.x, vector.begin.y, vector.begin.z, 0.0, 0.0, 1.0);
 	}
 }

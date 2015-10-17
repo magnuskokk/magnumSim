@@ -2,9 +2,8 @@ package model;
 
 public class Vector3D {
 
-	public double x, y, z;
 	public Point3D begin, end;
-
+	
 	// Define by begin and end points
 	public Vector3D(Point3D begin, Point3D end) {
 		this.begin = begin;
@@ -12,7 +11,11 @@ public class Vector3D {
 	}
 
 	public void multiply(double mul) {
-		this.begin.multiply(mul);
-		this.end.multiply(mul);
+		begin.multiply(mul);
+		end.multiply(mul);
+	}
+	
+	public double length() {
+		return Math.sqrt(Math.pow(end.x - begin.x, 2) + Math.pow(end.y - begin.y, 2) + Math.pow(end.z - begin.z, 2));
 	}
 }

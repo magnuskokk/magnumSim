@@ -121,7 +121,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		gl.glEnable(GL2.GL_NORMALIZE);
 
-		this.camera = new Camera();
+		camera = new Camera();
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -148,7 +148,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
-		this.camera.lookAt(glu);
+		camera.lookAt(glu);
 
 		// draw planets
 		drawPlanets(gl);
@@ -238,20 +238,20 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		int x = e.getX();
 		int y = e.getY();
 
-		if (x > this.oldMouseX) {
-			this.camera.rotateRight();
+		if (x > oldMouseX) {
+			camera.rotateRight();
 		} else {
-			this.camera.rotateLeft();
+			camera.rotateLeft();
 		}
 
-		if (y > this.oldMouseY) {
-			this.camera.rotateUp();
+		if (y > oldMouseY) {
+			camera.rotateUp();
 		} else {
-			this.camera.rotateDown();
+			camera.rotateDown();
 		}
 
-		this.oldMouseX = e.getX();
-		this.oldMouseY = e.getY();
+		oldMouseX = e.getX();
+		oldMouseY = e.getY();
 	}
 
 	public void mouseMoved(MouseEvent e) {
@@ -277,19 +277,19 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		
 	    switch(keyCode) { 
 	        case KeyEvent.VK_UP:
-	            this.camera.moveForward();
+	            camera.moveForward();
 	            break;
 	            
 	        case KeyEvent.VK_DOWN:
-	            this.camera.moveBack();
+	            camera.moveBack();
 	            break;
 	            
 	        case KeyEvent.VK_LEFT:
-	            this.camera.moveLeft();
+	            camera.moveLeft();
 	            break;
 	            
 	        case KeyEvent.VK_RIGHT :
-	            this.camera.moveRight();
+	            camera.moveRight();
 	            break;
 	     }
 	}
