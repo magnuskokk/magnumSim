@@ -2,51 +2,79 @@ package view;
 
 import com.jogamp.opengl.glu.GLU;
 
+import model.Point3D;
 import model.Vector3D;
 
 public class Camera {
 
-	private double eyeX, eyeY, eyeZ, centerX, centerY, centerZ;
-	
+	private Point3D eye, center;
+
+	private Vector3D vector;
+
 	public Camera() {
-		eyeX = 0.0f;
-		eyeY = 20.0f;
-		eyeZ = 0.0f;
 
-		centerX = 0.0f;
-		centerY = 0.0f;
-		centerZ = 0.0f;
+		this.eye = new Point3D(0.0f, 20.0f, 0.0f);
+		this.center = new Point3D(0.0f, 0.0f, 0.0f);
+
+		// This is the camera vector
+		this.vector = new Vector3D(this.center, this.eye);
 	}
 
-	public void moveUp() {
-
+	public void moveForward() {
+		System.out.println("forward");
 	}
 
-	public void moveDown() {
+	public void moveBack() {
+		System.out.println("back");
 
 	}
 
 	public void moveLeft() {
+		System.out.println("left");
 
 	}
 
 	public void moveRight() {
+		System.out.println("right");
+
+	}
+
+	public void rotateUp() {
+		System.out.println("rotateUp");
+
+	}
+
+	public void rotateDown() {
+		System.out.println("rotateDown");
+
+	}
+
+	public void rotateLeft() {
+		System.out.println("rotateLeft");
+
+	}
+
+	public void rotateRight() {
+		System.out.println("rotateRight");
 
 	}
 
 	public void zoomIn() {
-		this.eyeX *= 0.9f;
-		this.eyeY *= 0.9f;
-		this.eyeZ *= 0.9f;
+		// Make the vector shorter, so the camera moves closer
+		this.vector.multiply(0.9f);
 	}
 
 	public void zoomOut() {
-		this.eyeX *= 1.1f;
-		this.eyeY *= 1.1f;
-		this.eyeZ *= 1.1f;
+		// Make the vector longer, so the camera moves further
+		this.vector.multiply(1.1f);
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(this.eyeX, this.eyeY, this.eyeZ, this.centerX, this.centerY, this.centerZ, 0.0, 0.0, 1.0);
+		// System.out.println(this.vector.begin);
+		// System.exit(0);
+
+		glu.gluLookAt(this.vector.end.x, this.vector.end.y, this.vector.end.z, this.vector.begin.x, this.vector.begin.y,
+				this.vector.begin.z, 0.0, 0.0, 1.0);
+
 	}
 }
