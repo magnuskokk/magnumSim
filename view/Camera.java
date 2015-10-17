@@ -2,8 +2,8 @@ package view;
 
 import com.jogamp.opengl.glu.GLU;
 
-import model.Point3D;
-import model.Vector3D;
+import model.maths3d.Point3D;
+import model.maths3d.Vector3D;
 
 public class Camera {
 

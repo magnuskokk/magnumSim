@@ -1,4 +1,4 @@
-package model;
+package model.maths3d;
 
 public class Vector3D {
 
