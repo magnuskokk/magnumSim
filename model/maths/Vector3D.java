@@ -1,5 +1,6 @@
 package model.maths;
 
+//TODO maybe extend this class to create the camera vector separately
 public class Vector3D {
 
 	public double x, y, z;
@@ -25,7 +26,7 @@ public class Vector3D {
 		end = null;
 	}
 
-	public void multiply(double mul) {
+	public Vector3D multiply(double mul) {
 		x *= mul;
 		y *= mul;
 		z *= mul;
@@ -34,11 +35,16 @@ public class Vector3D {
 			begin.multiply(mul);
 			end.multiply(mul);
 		}
+		
+		return this;
 	}
 	
-	public void add(Vector3D vector) {
+	public Vector3D add(Vector3D vector) {
+		x += vector.x;
+		y += vector.y;
+		z += vector.z;
 		
-		
+		return this;
 	}
 	
 	public double length() {
