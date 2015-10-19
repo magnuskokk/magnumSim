@@ -3,20 +3,20 @@ package view;
 import com.jogamp.opengl.glu.GLU;
 
 import model.maths.Point3D;
-import model.maths.Vector3D;
+import model.maths.Vector3DWithPoints;
 
 public class Camera {
 
 	private Point3D eye, center;
 
-	private Vector3D vector;
+	private Vector3DWithPoints vector;
 
 	public Camera() {
 		eye = new Point3D(0.0f, 20.0f, 0.0f);
 		center = new Point3D(0.0f, 0.0f, 0.0f);
 
 		// This is the camera vector
-		vector = new Vector3D(center, eye);
+		vector = new Vector3DWithPoints(eye, center);
 	}
 
 	public void moveForward() {
@@ -69,6 +69,6 @@ public class Camera {
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(vector.end.x, vector.end.y, vector.end.z, vector.begin.x, vector.begin.y, vector.begin.z, 0.0, 0.0, 1.0);
+		glu.gluLookAt(vector.begin.x, vector.begin.y, vector.begin.z, vector.end.x, vector.end.y, vector.end.z, 0.0, 0.0, 1.0);
 	}
 }

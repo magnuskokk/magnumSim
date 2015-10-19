@@ -4,8 +4,10 @@ import model.maths.Vector3D;
 
 public class Mass {
 	
-	double mass; // mass
-	Vector3D pos, vel, force; // position, velocity and force
+	protected double mass; // mass
+	protected Vector3D pos; // position, velocity and force
+	protected Vector3D vel;
+	protected Vector3D force;
 
 	public Mass(double mass) {
 		this.mass = mass;

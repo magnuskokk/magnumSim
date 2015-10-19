@@ -10,7 +10,7 @@ public class Vector3DWithPoints {
 		this.end = end;
 	}
 	
-	public Vector3DWithPoints multiply() {
+	public void multiply(double mul) {
 		
 	}
 

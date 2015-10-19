@@ -19,6 +19,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.FPSAnimator;
 
+import model.astronomy.Space;
 import view.Camera;
 
 public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
@@ -26,7 +27,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
 		GLCanvas canvas = new GLCanvas();
-		final FPSAnimator animator = new FPSAnimator(canvas, 100);
+		final FPSAnimator animator = new FPSAnimator(canvas, 30);
 
 		GLEventListener listener = new Main(animator);
 
@@ -71,13 +72,12 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	private int oldMouseX;
 	private int oldMouseY;
 
-	public float hourofday = 0f;
-	public float dayofyear = 0f;
-	public float dayofmonth = 10f;
 
 	private FPSAnimator m_animator = null;
 
 	public Camera camera = null;
+
+	public Space space;
 
 	public Main(FPSAnimator animator) {
 		m_animator = animator;
@@ -121,7 +121,8 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		gl.glEnable(GL2.GL_NORMALIZE);
 
-		camera = new Camera();
+		this.camera = new Camera();
+		this.space = new Space();
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -141,6 +142,9 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glLoadIdentity();
 	}
 
+	/**
+	 * This method is called in every frame
+	 */
 	public void display(GLAutoDrawable drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
@@ -148,63 +152,10 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
-		camera.lookAt(glu);
+		this.camera.lookAt(glu);
+		this.space.simulate(gl);
 
-		// draw planets
-		drawPlanets(gl);
 		gl.glFlush();
-	}
-
-	// planets
-	public void drawPlanets(GL2 gl) {
-
-		float angleDay = (hourofday / 24f) * 360f;
-		float angleYear = (dayofyear / 365f) * 360f;
-		float angleMonth = (dayofmonth / 28f) * 360f;
-		// Clocktick (unit is 1 hour): step time.
-		final float clocktick = 24f;
-		hourofday = (hourofday + clocktick) % 24f;
-		dayofmonth = (dayofmonth + (clocktick / 24f)) % 28f;
-		dayofyear = (dayofyear + (clocktick / 24f)) % 365f;
-
-		// System.out.println("Day: " + angleDay + " Month: " + angleMonth + "
-		// Year: " + angleYear);// ddd
-
-		GLU glu = new GLU(); // needed for lookat
-		GLUquadric glpQ = glu.gluNewQuadric();
-
-		gl.glPushMatrix();
-		{
-			someMaterials.setMaterialGoldenSun(gl);
-
-			// Sun
-			gl.glColor4f(1f, 1f, 1f, 1f);
-			glu.gluSphere(glpQ, 0.8f, 10, 10);
-
-			gl.glPushMatrix();
-			{
-				someMaterials.setMaterialGreenPlanet(gl);
-
-				// Planet 1
-				gl.glRotatef(angleYear, 0.0f, 1.0f, 0.0f);
-				gl.glTranslatef(3.0f, 0.0f, 0.0f);
-				gl.glColor4f(0f, 1f, 0f, 1f);
-				glu.gluSphere(glpQ, 0.3f, 10, 10);
-
-				// Moon 11
-				gl.glPushMatrix();
-				{
-					gl.glRotatef(angleMonth, 0.0f, 1.0f, 0.0f);
-					gl.glTranslatef(0.8f, 0.0f, 0.0f);
-					glu.gluSphere(glpQ, 0.1f, 10, 10);
-				}
-				gl.glPopMatrix();
-
-			}
-			gl.glPopMatrix(); // Planet 1
-
-		}
-		gl.glPopMatrix(); // sun
 	}
 
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
@@ -274,28 +225,28 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		
-	    switch(keyCode) { 
-	        case KeyEvent.VK_UP:
-	            camera.moveForward();
-	            break;
-	            
-	        case KeyEvent.VK_DOWN:
-	            camera.moveBack();
-	            break;
-	            
-	        case KeyEvent.VK_LEFT:
-	            camera.moveLeft();
-	            break;
-	            
-	        case KeyEvent.VK_RIGHT :
-	            camera.moveRight();
-	            break;
-	     }
+
+		switch (keyCode) {
+		case KeyEvent.VK_UP:
+			camera.moveForward();
+			break;
+
+		case KeyEvent.VK_DOWN:
+			camera.moveBack();
+			break;
+
+		case KeyEvent.VK_LEFT:
+			camera.moveLeft();
+			break;
+
+		case KeyEvent.VK_RIGHT:
+			camera.moveRight();
+			break;
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {		
+	public void keyReleased(KeyEvent e) {
 	}
 
 	@Override
