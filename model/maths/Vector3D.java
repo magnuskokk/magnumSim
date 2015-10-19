@@ -17,6 +17,7 @@ public class Vector3D {
 		this.y = 0;
 		this.z = 0;
 	}
+
 	/**
 	 * Copy constructor
 	 */
@@ -31,7 +32,7 @@ public class Vector3D {
 
 		return this;
 	}
-	
+
 	public Vector3D divide(float scalar) {
 		this.x /= scalar;
 		this.y /= scalar;
@@ -47,17 +48,29 @@ public class Vector3D {
 
 		return this;
 	}
-	
+
+	public boolean isNullVector() {
+		return (this.x == 0 && this.y == 0 && this.z == 0) ? true : false;
+	}
+
+	public boolean isParallelTo(Vector3D vector) {
+		float Mx = this.y * vector.z - this.z * vector.y;
+		float My = this.z * vector.x - this.x * vector.z;
+		float Mz = this.x * vector.y - this.y * vector.x;
+
+		Vector3D vektorKorrutis = new Vector3D(Mx, My, Mz);
+
+		return vektorKorrutis.isNullVector() ? true : false;
+	}
+
 	public float getAngleCosTo(Vector3D vector) {
-		float vektorKorrutis = this.x * vector.x + this.y * vector.y + this.z + vector.z;
-		float skalaarKorrutis = this.length() * vector.length();
-		
-		float angleCos = vektorKorrutis / skalaarKorrutis;
-		
+		float angleCos = (this.x * vector.x + this.y * vector.y + this.z + vector.z)
+				/ (this.length() * vector.length());
+
 		return angleCos;
 	}
 
 	public float length() {
-		return (float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+		return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 	}
 }
