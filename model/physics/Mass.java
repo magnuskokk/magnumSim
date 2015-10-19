@@ -20,12 +20,22 @@ public class Mass {
 		this.force.add(force);
 	}
 
-	public void solve(int dt) {
-		// vel += (force/mass) * dt
-		float mul = dt / this.mass;
-		this.vel.add(this.force.multiply(mul));
+	public void solve() {
+		// acceleration = force / mass
+		// vel += acceleration
 
-		// pos += vel * dt
-		this.pos.add(this.vel.multiply(dt));
+		// Reference the force, we only need to calculate the position and
+		// velocity
+		Vector3D currentForce = new Vector3D(this.force);
+		Vector3D acceleration = currentForce.divide(this.mass);
+
+		this.vel.add(acceleration);
+
+		// pos += vel
+		this.pos.add(this.vel);
+
+		System.out.println(this.force.x);
+		System.out.println(this.force.y);
+		System.out.println(this.force.z);
 	}
 }

@@ -16,31 +16,25 @@ public class Space {
 	private Mass planet;
 
 	public Space() {
-		Vector3D pos = new Vector3D(0.0f);
-		Vector3D vel = new Vector3D(0.0f);
-		Vector3D force = new Vector3D(0.0f);
+		Vector3D pos = new Vector3D();
+		Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
+		Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
 
-		this.planet = new Mass(10.0f, pos, vel, force);
+		this.planet = new Mass(8.0f, pos, vel, force);
 
 	}
 
 	/**
 	 * This method is called from Main.display() every frame
 	 */
-	public void simulate(GL2 gl, int dt) {
+	public void simulate(GL2 gl, int time, int frame) {
 		/*
 		 * Basically we need to iterate through all the planets and calculate
 		 * their new position and velocity vectors according to the force
 		 * applied to them
 		 */
 
-		if (dt == 1) {
-			Vector3D force = new Vector3D(0.001f, 0.002f, 0.002f);
-
-			this.planet.applyForce(force);
-		}
-
-		this.planet.solve(dt);
+		this.planet.solve();
 
 		// Here the calculations are made, time to draw to the screen
 

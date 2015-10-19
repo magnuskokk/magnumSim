@@ -24,7 +24,6 @@ import view.Camera;
 
 public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
-
 	// rotating the scene
 	private float view_rotx = 20.0f;
 	private float view_roty = 30.0f;
@@ -33,19 +32,18 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	private int oldMouseX;
 	private int oldMouseY;
 
-
 	private FPSAnimator m_animator = null;
 
 	public Camera camera = null;
 
 	public Space space;
-	
-	private int dt;
-	
+
 	static int fps = 30;
-	
-	private int time = 0;
-	
+
+	private int time = 1; // let time start from 1 second
+
+	private int frame = 0;
+
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
 		GLCanvas canvas = new GLCanvas();
@@ -61,7 +59,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
-		frame.setSize(800, 600);
+		frame.setSize(1000, 1000);
 
 		frame.addWindowListener(new WindowAdapter() {
 
@@ -85,7 +83,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		animator.start();
 
 	}
-
 
 	public Main(FPSAnimator animator) {
 		m_animator = animator;
@@ -131,8 +128,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		this.camera = new Camera();
 		this.space = new Space();
-		
-		this.dt = 1;
+
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -156,26 +152,21 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	 * This method is called in every frame
 	 */
 	public void display(GLAutoDrawable drawable) {
+		this.frame++;
 
 		GL2 gl = drawable.getGL().getGL2();
 		GLU glu = new GLU(); // needed for lookat
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
-
-		
-		
-		if (this.dt % fps == 0) {
+		if (this.frame % fps == 0) {
 			this.time++;
 		}
-	
-		
+
 		this.camera.lookAt(glu);
-		this.space.simulate(gl, this.time);
+		this.space.simulate(gl, this.time, this.frame);
 
 		gl.glFlush();
-		
-		this.dt++;
 	}
 
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
