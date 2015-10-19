@@ -10,26 +10,18 @@ import model.physics.Mass;
 
 public class Space {
 
-	// private Planet[] planets;
-
 	public float hourofday = 0f;
 	public float dayofyear = 0f;
 	public float dayofmonth = 10f;
 	private Mass planet;
-
 
 	public Space() {
 		Vector3D pos = new Vector3D(0.0f);
 		Vector3D vel = new Vector3D(0.0f);
 		Vector3D force = new Vector3D(0.0f);
 
-		
 		this.planet = new Mass(10.0f, pos, vel, force);
-		// Planet[] planets = new Planet[2];
-		//
-		// planets[0] = new Planet();
-		// planets[1] = new Planet();
-		// TODO Auto-generated constructor stub
+
 	}
 
 	/**

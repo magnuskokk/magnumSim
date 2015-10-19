@@ -165,7 +165,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		
 		
-		if (this.dt%fps == 0) {
+		if (this.dt % fps == 0) {
 			this.time++;
 		}
 	
