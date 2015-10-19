@@ -5,32 +5,67 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
 import main.someMaterials;
+import model.maths.Vector3D;
 
 public class Space {
 
+	// private Planet[] planets;
 
 	public float hourofday = 0f;
 	public float dayofyear = 0f;
 	public float dayofmonth = 10f;
+
+	public Planet planet;
+
 	public Space() {
+		this.planet = new Planet();
+		// Planet[] planets = new Planet[2];
+		//
+		// planets[0] = new Planet();
+		// planets[1] = new Planet();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * This method is called from Main.display() every frame
 	 */
-	public void simulate(GL2 gl) {
-		/* Basically we need to iterate through all the planets
-		 * and calculate their new position and velocity vectors
-		 * according to the force applied to them
+	public void simulate(GL2 gl, int dt) {
+		/*
+		 * Basically we need to iterate through all the planets and calculate
+		 * their new position and velocity vectors according to the force
+		 * applied to them
 		 */
-		
-		
-		
+
+		if (dt == 1) {
+			Vector3D force = new Vector3D(0.001f, 0.002f, 0.002f);
+
+			this.planet.applyForce(force);
+		}
+
+		this.planet.simulate(dt);
+
+		// Here the calculations are made, time to draw to the screen
+
+		GLU glu = new GLU(); // needed for lookat
+		GLUquadric glpQ = glu.gluNewQuadric();
+
+		gl.glPushMatrix();
+		{
+			someMaterials.setMaterialGoldenSun(gl);
+
+			// Sun
+			gl.glColor4f(1f, 1f, 1f, 1f);
+			gl.glTranslatef((float) planet.pos.x, (float) planet.pos.y, (float) planet.pos.z);
+
+			glu.gluSphere(glpQ, 0.8f, 10, 10);
+
+		}
+		gl.glPopMatrix(); // sun
+
 	}
-	
+
 	/**
-	 * TODO: rewrite this method 
+	 * TODO: rewrite this method
 	 * 
 	 * @param gl
 	 */
@@ -52,9 +87,6 @@ public class Space {
 		GLU glu = new GLU(); // needed for lookat
 		GLUquadric glpQ = glu.gluNewQuadric();
 
-		
-		
-		
 		gl.glPushMatrix();
 		{
 			someMaterials.setMaterialGoldenSun(gl);

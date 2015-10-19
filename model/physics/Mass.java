@@ -5,8 +5,8 @@ import model.maths.Vector3D;
 public class Mass {
 	
 	protected double mass; // mass
-	protected Vector3D pos; // position, velocity and force
-	protected Vector3D vel;
+	public Vector3D pos; // position, velocity and force
+	public Vector3D vel;
 	protected Vector3D force;
 
 	public Mass(double mass) {
@@ -17,7 +17,7 @@ public class Mass {
 		this.force.add(force);
 	}
 	
-	public void simulate(double dt) {
+	public void simulate(int dt) {
 		// vel += (force/mass) * dt
 		double mul = dt / this.mass;
 		this.vel.add(this.force.multiply(mul));

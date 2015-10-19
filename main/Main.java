@@ -24,10 +24,32 @@ import view.Camera;
 
 public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
+
+	// rotating the scene
+	private float view_rotx = 20.0f;
+	private float view_roty = 30.0f;
+
+	// remember last mouse position
+	private int oldMouseX;
+	private int oldMouseY;
+
+
+	private FPSAnimator m_animator = null;
+
+	public Camera camera = null;
+
+	public Space space;
+	
+	private int dt;
+	
+	static int fps = 30;
+	
+	private int time = 0;
+	
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
 		GLCanvas canvas = new GLCanvas();
-		final FPSAnimator animator = new FPSAnimator(canvas, 30);
+		final FPSAnimator animator = new FPSAnimator(canvas, fps);
 
 		GLEventListener listener = new Main(animator);
 
@@ -64,20 +86,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	}
 
-	// rotating the scene
-	private float view_rotx = 20.0f;
-	private float view_roty = 30.0f;
-
-	// remember last mouse position
-	private int oldMouseX;
-	private int oldMouseY;
-
-
-	private FPSAnimator m_animator = null;
-
-	public Camera camera = null;
-
-	public Space space;
 
 	public Main(FPSAnimator animator) {
 		m_animator = animator;
@@ -123,6 +131,8 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		this.camera = new Camera();
 		this.space = new Space();
+		
+		this.dt = 1;
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -152,10 +162,20 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
+
+		
+		
+		if (this.dt%fps == 0) {
+			this.time++;
+		}
+	
+		
 		this.camera.lookAt(glu);
-		this.space.simulate(gl);
+		this.space.simulate(gl, this.time);
 
 		gl.glFlush();
+		
+		this.dt++;
 	}
 
 	public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
