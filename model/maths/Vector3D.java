@@ -3,7 +3,6 @@ package model.maths;
 public class Vector3D {
 
 	public float x, y, z;
-	private Vector3D vector;
 
 	// Define by vector coordinates
 	public Vector3D(float x, float y, float z) {
@@ -48,8 +47,17 @@ public class Vector3D {
 
 		return this;
 	}
+	
+	public float getAngleCosTo(Vector3D vector) {
+		float vektorKorrutis = this.x * vector.x + this.y * vector.y + this.z + vector.z;
+		float skalaarKorrutis = this.length() * vector.length();
+		
+		float angleCos = vektorKorrutis / skalaarKorrutis;
+		
+		return angleCos;
+	}
 
-	public double length() {
-		return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+	public float length() {
+		return (float)Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
 	}
 }
