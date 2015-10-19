@@ -6,6 +6,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 
 import main.someMaterials;
 import model.maths.Vector3D;
+import model.physics.Mass;
 
 public class Space {
 
@@ -14,11 +15,16 @@ public class Space {
 	public float hourofday = 0f;
 	public float dayofyear = 0f;
 	public float dayofmonth = 10f;
+	private Mass planet;
 
-	public Planet planet;
 
 	public Space() {
-		this.planet = new Planet();
+		Vector3D pos = new Vector3D(0.0f);
+		Vector3D vel = new Vector3D(0.0f);
+		Vector3D force = new Vector3D(0.0f);
+
+		
+		this.planet = new Mass(10.0f, pos, vel, force);
 		// Planet[] planets = new Planet[2];
 		//
 		// planets[0] = new Planet();
@@ -42,7 +48,7 @@ public class Space {
 			this.planet.applyForce(force);
 		}
 
-		this.planet.simulate(dt);
+		this.planet.solve(dt);
 
 		// Here the calculations are made, time to draw to the screen
 

@@ -4,22 +4,25 @@ import model.maths.Vector3D;
 
 public class Mass {
 	
-	protected double mass; // mass
+	protected float mass; // mass
 	public Vector3D pos; // position, velocity and force
 	public Vector3D vel;
 	protected Vector3D force;
 
-	public Mass(double mass) {
+	public Mass(float mass, Vector3D pos, Vector3D vel, Vector3D force) {
 		this.mass = mass;
+		this.pos = pos;
+		this.vel = vel;
+		this.force = force;
 	}
 	
 	public void applyForce(Vector3D force) {
 		this.force.add(force);
 	}
 	
-	public void simulate(int dt) {
+	public void solve(int dt) {
 		// vel += (force/mass) * dt
-		double mul = dt / this.mass;
+		float mul = dt / this.mass;
 		this.vel.add(this.force.multiply(mul));
 		
 		// pos += vel * dt
