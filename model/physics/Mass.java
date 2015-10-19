@@ -5,12 +5,14 @@ import model.maths.Vector3D;
 public class Mass {
 
 	protected float mass; // mass
+	public float radius;
 	public Vector3D pos; // position, velocity and force
 	public Vector3D vel;
 	protected Vector3D force;
 
-	public Mass(float mass, Vector3D pos, Vector3D vel, Vector3D force) {
+	public Mass(float mass, float radius, Vector3D pos, Vector3D vel, Vector3D force) {
 		this.mass = mass;
+		this.radius = radius;
 		this.pos = pos;
 		this.vel = vel;
 		this.force = force;
@@ -33,9 +35,5 @@ public class Mass {
 
 		// pos += vel
 		this.pos.add(this.vel);
-
-		System.out.println(this.force.x);
-		System.out.println(this.force.y);
-		System.out.println(this.force.z);
 	}
 }

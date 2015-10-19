@@ -59,7 +59,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
-		frame.setSize(1000, 1000);
+		frame.setSize(1000, 900);
 
 		frame.addWindowListener(new WindowAdapter() {
 
