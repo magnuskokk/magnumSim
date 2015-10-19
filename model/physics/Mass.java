@@ -4,7 +4,7 @@ import model.maths.Vector3D;
 
 public class Mass {
 
-	protected float mass; // mass
+	public float mass; // mass
 	public float radius;
 	public Vector3D pos; // position, velocity and force
 	public Vector3D vel;
