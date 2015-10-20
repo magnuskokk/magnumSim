@@ -24,8 +24,8 @@ public class Vector3D {
 	public Vector3D(Vector3D vector) {
 		this(vector.x, vector.y, vector.z);
 	}
-
-	public Vector3D multiply(float scalar) {
+//TODO: decide whether we need floats or doubles
+	public Vector3D multiply(double scalar) {
 		this.x *= scalar;
 		this.y *= scalar;
 		this.z *= scalar;
@@ -69,10 +69,10 @@ public class Vector3D {
 
 		return angleCos;
 	}
-	
+
 	public Vector3D getUnitVector() {
 		Vector3D vector = new Vector3D(this);
-		
+
 		return vector.divide(vector.length());
 	}
 

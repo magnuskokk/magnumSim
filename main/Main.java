@@ -38,9 +38,12 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public Space space;
 
-	static int fps = 8;
+	static int fps = 30;
 
-	private int time = 1; // let time start from 1 second
+	private long time0 = System.nanoTime();
+	private double time = 0;
+	private double lastTime = 0;
+	private double dt = 0;
 
 	private int frame = 0;
 
@@ -59,7 +62,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
-		frame.setSize(1000, 500);
+		frame.setSize(1000, 750	);
 
 		frame.addWindowListener(new WindowAdapter() {
 
@@ -159,12 +162,18 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
-		if (this.frame % fps == 0) {
-			this.time++;
-		}
+		// if (this.frame % fps == 0) {
+		// this.time++;
+		// }
+		//
+		this.time = (System.nanoTime() - this.time0) / 1E9; // time in seconds
+															// from the
+															// beginning
+		this.dt = this.time - this.lastTime; // time of last loop
+		this.lastTime = this.time;
 
 		this.camera.lookAt(glu);
-		this.space.simulate(gl, fps, this.time, this.frame);
+		this.space.simulate(gl, this.dt);
 
 		gl.glFlush();
 	}

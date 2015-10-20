@@ -10,6 +10,8 @@ public class Mass {
 	public Vector3D vel;
 	protected Vector3D force;
 
+	public int passes;
+
 	public Mass(float mass, float radius, Vector3D pos, Vector3D vel, Vector3D force) {
 		this.mass = mass;
 		this.radius = radius;
@@ -32,20 +34,23 @@ public class Mass {
 		}
 	}
 
-	public void solve(int fps) {
+	public void solve(double dt) {
 		// acceleration = force / mass
 		// vel += acceleration
 
 		// Reference the force, we only need to calculate the position and
 		// velocity
+
+		// acceleration.multiply((float) fps);
+
 		Vector3D currentForce = new Vector3D(this.force);
 		Vector3D acceleration = currentForce.divide(this.mass);
-
-		acceleration.multiply((float) fps);
-
 		this.vel.add(acceleration);
 
-		// pos += vel
+		this.vel.multiply(dt);
+
 		this.pos.add(this.vel);
+
+		// pos += vel
 	}
 }

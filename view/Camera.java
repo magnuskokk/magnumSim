@@ -12,7 +12,7 @@ public class Camera {
 	private Vector3DWithPoints vector;
 
 	public Camera() {
-		eye = new Point3D(0.0f, 50.0f, 0.0f);
+		eye = new Point3D(0.0f, 70.0f, 0.0f);
 		center = new Point3D(0.0f, 0.0f, 0.0f);
 
 		// This is the camera vector
@@ -69,6 +69,7 @@ public class Camera {
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(vector.begin.x, vector.begin.y, vector.begin.z, vector.end.x, vector.end.y, vector.end.z, 0.0, 0.0, 1.0);
+		glu.gluLookAt(vector.begin.x, vector.begin.y, vector.begin.z, vector.end.x, vector.end.y, vector.end.z, 0.0,
+				0.0, 1.0);
 	}
 }

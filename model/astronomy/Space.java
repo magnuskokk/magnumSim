@@ -17,11 +17,9 @@ public class Space {
 	// public float dayofmonth = 10f;
 	private Mass[] planets;
 
-	private int numPlanets = 2;
+	private int numPlanets = 50;
 
-	static float G = 0.0001f;
-
-	static float force;
+	static float G = 0.001f; // TODO: change this
 
 	public Space() {
 		// Vector3D pos = new Vector3D(0.0f, 0.0f, 5.0f);
@@ -37,26 +35,21 @@ public class Space {
 			int randomY = rand.nextInt((10) + 1) - 5;
 			int randomZ = rand.nextInt((10) + 1) - 5;
 
-			Vector3D pos = new Vector3D((float) randomX, 0.0f, (float) randomZ);
-			// Vector3D pos = new Vector3D(0.0f, 0.0f, 0.0f);
+			Vector3D pos = new Vector3D((float) randomX, (float) randomY, (float) randomZ);
 
-			// Vector3D vel = new Vector3D((float) Math.random() / 10, (float)
-			// Math.random() / 10,
-			// (float) Math.random() / 10);
-
-			Vector3D vel = new Vector3D(((float) randomX) / 100, 0.0f, ((float) randomZ) / 100);
+			Vector3D vel = new Vector3D((float) Math.random(), (float) Math.random(), (float) Math.random());
 
 			Vector3D force = new Vector3D();
 
-			this.planets[i] = new Mass((float) Math.random() * 100, (float) Math.random(), pos, vel, force);
-
+			this.planets[i] = new Mass((float) Math.random() * 30, (float) Math.random(), pos, vel, force);
+			this.planets[i].passes = 0;
 		}
 	}
 
 	/**
 	 * This method is called from Main.display() every frame
 	 */
-	public void simulate(GL2 gl, int fps, int time, int frame) {
+	public void simulate(GL2 gl, double dt) {
 		/*
 		 * Basically we need to iterate through all the planets and calculate
 		 * their new position and velocity vectors according to the force
@@ -90,17 +83,11 @@ public class Space {
 
 					planets[i].applyForce(forceVector);
 
-					// System.out.println(forceBetween);
-
-					this.planets[i].solve(fps);
+					this.planets[i].solve(dt);
 
 					// planets[i].checkAndFixOutOfBounds();
-
 				}
-
 			}
-
-			// this.planets[i].solve();
 		}
 
 		// Here the calculations are made, time to draw to the screen
@@ -113,7 +100,7 @@ public class Space {
 			gl.glPushMatrix();
 			{
 				someMaterials.setMaterialGoldenSun(gl);
-				
+
 				gl.glColor4f(1f, 1f, 1f, 1f);
 				gl.glTranslatef((float) this.planets[i].pos.x, (float) this.planets[i].pos.y,
 						(float) this.planets[i].pos.z);
