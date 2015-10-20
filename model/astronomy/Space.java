@@ -16,16 +16,20 @@ public class Space {
 	// public float dayofyear = 0f;
 	// public float dayofmonth = 10f;
 	private Mass[] planets;
-	
-	private int numPlanets = 20;
+
+	private int numPlanets = 2;
+
+	static float G = 0.0001f;
+
+	static float force;
 
 	public Space() {
-//		Vector3D pos = new Vector3D(0.0f, 0.0f, 5.0f);
-//		Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
-//		Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
+		// Vector3D pos = new Vector3D(0.0f, 0.0f, 5.0f);
+		// Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
+		// Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
 
 		Random rand = new Random();
-		
+
 		this.planets = new Mass[this.numPlanets];
 
 		for (int i = 0; i < this.numPlanets; i++) {
@@ -33,24 +37,26 @@ public class Space {
 			int randomY = rand.nextInt((10) + 1) - 5;
 			int randomZ = rand.nextInt((10) + 1) - 5;
 
-			
-			
-			Vector3D pos = new Vector3D((float)randomX, (float)randomY, (float)randomZ);
-			//Vector3D pos = new Vector3D(0.0f, 0.0f, 0.0f);
+			Vector3D pos = new Vector3D((float) randomX, 0.0f, (float) randomZ);
+			// Vector3D pos = new Vector3D(0.0f, 0.0f, 0.0f);
 
-			
-			Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
-			Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
+			// Vector3D vel = new Vector3D((float) Math.random() / 10, (float)
+			// Math.random() / 10,
+			// (float) Math.random() / 10);
 
-			this.planets[i] = new Mass(8.0f, (float) Math.random(), pos, vel, force);
-			
+			Vector3D vel = new Vector3D(((float) randomX) / 100, 0.0f, ((float) randomZ) / 100);
+
+			Vector3D force = new Vector3D();
+
+			this.planets[i] = new Mass((float) Math.random() * 100, (float) Math.random(), pos, vel, force);
+
 		}
 	}
 
 	/**
 	 * This method is called from Main.display() every frame
 	 */
-	public void simulate(GL2 gl, int time, int frame) {
+	public void simulate(GL2 gl, int fps, int time, int frame) {
 		/*
 		 * Basically we need to iterate through all the planets and calculate
 		 * their new position and velocity vectors according to the force
@@ -58,7 +64,43 @@ public class Space {
 		 */
 
 		for (int i = 0; i < this.numPlanets; i++) {
-			this.planets[i].solve();
+
+			// Find all gravitational forces which attract a single planet
+
+			for (int j = 0; j < this.numPlanets; j++) {
+				if (i != j) {
+
+					float distanceVectorX = planets[j].pos.x - planets[i].pos.x;
+					float distanceVectorY = planets[j].pos.y - planets[i].pos.y;
+					float distanceVectorZ = planets[j].pos.z - planets[i].pos.z;
+
+					Vector3D distanceVector = new Vector3D(distanceVectorX, distanceVectorY, distanceVectorZ);
+
+					float forceBetween = (G * planets[i].mass * planets[j].mass)
+							/ ((float) Math.pow(distanceVector.length(), 2));
+
+					Vector3D unitVector = distanceVector.getUnitVector();
+
+					Vector3D forceVector = new Vector3D();
+
+					// if the planets are far enough (not side by side)
+					if (distanceVector.length() >= (planets[i].radius + planets[j].radius)) {
+						forceVector = unitVector.multiply(forceBetween);
+					}
+
+					planets[i].applyForce(forceVector);
+
+					// System.out.println(forceBetween);
+
+					this.planets[i].solve(fps);
+
+					// planets[i].checkAndFixOutOfBounds();
+
+				}
+
+			}
+
+			// this.planets[i].solve();
 		}
 
 		// Here the calculations are made, time to draw to the screen
@@ -66,24 +108,21 @@ public class Space {
 		GLU glu = new GLU(); // needed for lookat
 		for (int i = 0; i < this.numPlanets; i++) {
 
-			
 			GLUquadric glpQ = glu.gluNewQuadric();
 
 			gl.glPushMatrix();
 			{
 				someMaterials.setMaterialGoldenSun(gl);
-
-				// Sun
+				
 				gl.glColor4f(1f, 1f, 1f, 1f);
-				gl.glTranslatef((float) this.planets[i].pos.x, (float) this.planets[i].pos.y, (float) this.planets[i].pos.z);
-
+				gl.glTranslatef((float) this.planets[i].pos.x, (float) this.planets[i].pos.y,
+						(float) this.planets[i].pos.z);
 
 				glu.gluSphere(glpQ, this.planets[i].radius, 10, 10);
 
 			}
-			gl.glPopMatrix(); // sun
+			gl.glPopMatrix();
 		}
-		
 
 	}
 
@@ -94,54 +133,55 @@ public class Space {
 	 */
 	// planets
 	public void drawPlanets(GL2 gl) {
-//
-//		float angleDay = (hourofday / 24f) * 360f;
-//		float angleYear = (dayofyear / 365f) * 360f;
-//		float angleMonth = (dayofmonth / 28f) * 360f;
-//		// Clocktick (unit is 1 hour): step time.
-//		final float clocktick = 24f;
-//		hourofday = (hourofday + clocktick) % 24f;
-//		dayofmonth = (dayofmonth + (clocktick / 24f)) % 28f;
-//		dayofyear = (dayofyear + (clocktick / 24f)) % 365f;
-//
-//		// System.out.println("Day: " + angleDay + " Month: " + angleMonth + "
-//		// Year: " + angleYear);// ddd
-//
-//		GLU glu = new GLU(); // needed for lookat
-//		GLUquadric glpQ = glu.gluNewQuadric();
-//
-//		gl.glPushMatrix();
-//		{
-//			someMaterials.setMaterialGoldenSun(gl);
-//
-//			// Sun
-//			gl.glColor4f(1f, 1f, 1f, 1f);
-//			glu.gluSphere(glpQ, 0.8f, 10, 10);
-//
-//			gl.glPushMatrix();
-//			{
-//				someMaterials.setMaterialGreenPlanet(gl);
-//
-//				// Planet 1
-//				gl.glRotatef(angleYear, 0.0f, 1.0f, 0.0f);
-//				gl.glTranslatef(3.0f, 0.0f, 0.0f);
-//				gl.glColor4f(0f, 1f, 0f, 1f);
-//				glu.gluSphere(glpQ, 0.3f, 10, 10);
-//
-//				// Moon 11
-//				gl.glPushMatrix();
-//				{
-//					gl.glRotatef(angleMonth, 0.0f, 1.0f, 0.0f);
-//					gl.glTranslatef(0.8f, 0.0f, 0.0f);
-//					glu.gluSphere(glpQ, 0.1f, 10, 10);
-//				}
-//				gl.glPopMatrix();
-//
-//			}
-//			gl.glPopMatrix(); // Planet 1
-//
-//		}
-//		gl.glPopMatrix(); // sun
+		//
+		// float angleDay = (hourofday / 24f) * 360f;
+		// float angleYear = (dayofyear / 365f) * 360f;
+		// float angleMonth = (dayofmonth / 28f) * 360f;
+		// // Clocktick (unit is 1 hour): step time.
+		// final float clocktick = 24f;
+		// hourofday = (hourofday + clocktick) % 24f;
+		// dayofmonth = (dayofmonth + (clocktick / 24f)) % 28f;
+		// dayofyear = (dayofyear + (clocktick / 24f)) % 365f;
+		//
+		// // System.out.println("Day: " + angleDay + " Month: " + angleMonth +
+		// "
+		// // Year: " + angleYear);// ddd
+		//
+		// GLU glu = new GLU(); // needed for lookat
+		// GLUquadric glpQ = glu.gluNewQuadric();
+		//
+		// gl.glPushMatrix();
+		// {
+		// someMaterials.setMaterialGoldenSun(gl);
+		//
+		// // Sun
+		// gl.glColor4f(1f, 1f, 1f, 1f);
+		// glu.gluSphere(glpQ, 0.8f, 10, 10);
+		//
+		// gl.glPushMatrix();
+		// {
+		// someMaterials.setMaterialGreenPlanet(gl);
+		//
+		// // Planet 1
+		// gl.glRotatef(angleYear, 0.0f, 1.0f, 0.0f);
+		// gl.glTranslatef(3.0f, 0.0f, 0.0f);
+		// gl.glColor4f(0f, 1f, 0f, 1f);
+		// glu.gluSphere(glpQ, 0.3f, 10, 10);
+		//
+		// // Moon 11
+		// gl.glPushMatrix();
+		// {
+		// gl.glRotatef(angleMonth, 0.0f, 1.0f, 0.0f);
+		// gl.glTranslatef(0.8f, 0.0f, 0.0f);
+		// glu.gluSphere(glpQ, 0.1f, 10, 10);
+		// }
+		// gl.glPopMatrix();
+		//
+		// }
+		// gl.glPopMatrix(); // Planet 1
+		//
+		// }
+		// gl.glPopMatrix(); // sun
 
 	}
 

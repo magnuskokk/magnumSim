@@ -69,6 +69,12 @@ public class Vector3D {
 
 		return angleCos;
 	}
+	
+	public Vector3D getUnitVector() {
+		Vector3D vector = new Vector3D(this);
+		
+		return vector.divide(vector.length());
+	}
 
 	public float length() {
 		return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));

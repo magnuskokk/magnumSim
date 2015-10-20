@@ -22,7 +22,17 @@ public class Mass {
 		this.force.add(force);
 	}
 
-	public void solve() {
+	// TODO rewrite a new Planet class extending this class
+	public void checkAndFixOutOfBounds() {
+
+		int bounds = 20;
+
+		if (Math.abs(this.pos.x) > bounds || Math.abs(this.pos.y) > bounds || Math.abs(this.pos.z) > bounds) {
+			this.vel.multiply(-1);
+		}
+	}
+
+	public void solve(int fps) {
 		// acceleration = force / mass
 		// vel += acceleration
 
@@ -30,6 +40,8 @@ public class Mass {
 		// velocity
 		Vector3D currentForce = new Vector3D(this.force);
 		Vector3D acceleration = currentForce.divide(this.mass);
+
+		acceleration.multiply((float) fps);
 
 		this.vel.add(acceleration);
 

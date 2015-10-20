@@ -38,7 +38,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public Space space;
 
-	static int fps = 30;
+	static int fps = 8;
 
 	private int time = 1; // let time start from 1 second
 
@@ -59,7 +59,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
-		frame.setSize(1000, 900);
+		frame.setSize(1000, 500);
 
 		frame.addWindowListener(new WindowAdapter() {
 
@@ -164,7 +164,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		}
 
 		this.camera.lookAt(glu);
-		this.space.simulate(gl, this.time, this.frame);
+		this.space.simulate(gl, fps, this.time, this.frame);
 
 		gl.glFlush();
 	}

@@ -12,7 +12,7 @@ public class Camera {
 	private Vector3DWithPoints vector;
 
 	public Camera() {
-		eye = new Point3D(0.0f, 20.0f, 0.0f);
+		eye = new Point3D(0.0f, 50.0f, 0.0f);
 		center = new Point3D(0.0f, 0.0f, 0.0f);
 
 		// This is the camera vector
