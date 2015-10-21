@@ -25,8 +25,6 @@ import view.Camera;
 public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
 	// rotating the scene
-	private float view_rotx = 20.0f;
-	private float view_roty = 30.0f;
 
 	// remember last mouse position
 	private int oldMouseX;
@@ -38,14 +36,14 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public Space space;
 
-	static int fps = 30;
+	static int fps = 120;
 
 	private long time0 = System.nanoTime();
 	private double time = 0;
 	private double lastTime = 0;
 	private double dt = 0;
 
-	private int frame = 0;
+	private double slowMotionRatio = 200;
 
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
@@ -62,7 +60,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		canvas.addGLEventListener(listener);
 		frame.add(canvas);
-		frame.setSize(1000, 750	);
+		frame.setSize(1000, 750);
 
 		frame.addWindowListener(new WindowAdapter() {
 
@@ -155,7 +153,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	 * This method is called in every frame
 	 */
 	public void display(GLAutoDrawable drawable) {
-		this.frame++;
 
 		GL2 gl = drawable.getGL().getGL2();
 		GLU glu = new GLU(); // needed for lookat
@@ -173,7 +170,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		this.lastTime = this.time;
 
 		this.camera.lookAt(glu);
-		this.space.simulate(gl, this.dt);
+		this.space.simulate(gl, this.dt / this.slowMotionRatio);
 
 		gl.glFlush();
 	}
@@ -206,26 +203,27 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseDragged(MouseEvent e) {
+
+	}
+
+	public void mouseMoved(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
 
 		if (x > oldMouseX) {
-			camera.rotateRight();
+			this.camera.rotateRight();
 		} else {
-			camera.rotateLeft();
+			this.camera.rotateLeft();
 		}
 
 		if (y > oldMouseY) {
-			camera.rotateUp();
+			this.camera.rotateUp();
 		} else {
-			camera.rotateDown();
+			this.camera.rotateDown();
 		}
 
 		oldMouseX = e.getX();
 		oldMouseY = e.getY();
-	}
-
-	public void mouseMoved(MouseEvent e) {
 	}
 
 	@Override
@@ -233,13 +231,13 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		int notches = e.getWheelRotation();
-
-		if (notches < 0) {
-			camera.zoomIn();
-		} else {
-			camera.zoomOut();
-		}
+		// int notches = e.getWheelRotation();
+		//
+		// if (notches < 0) {
+		// camera.zoomIn();
+		// } else {
+		// camera.zoomOut();
+		// }
 	}
 
 	@Override
@@ -247,20 +245,28 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		int keyCode = e.getKeyCode();
 
 		switch (keyCode) {
-		case KeyEvent.VK_UP:
-			camera.moveForward();
+		case KeyEvent.VK_W:
+			this.camera.moveForward();
 			break;
 
-		case KeyEvent.VK_DOWN:
-			camera.moveBack();
+		case KeyEvent.VK_S:
+			this.camera.moveBack();
 			break;
 
-		case KeyEvent.VK_LEFT:
-			camera.moveLeft();
+		case KeyEvent.VK_A:
+			this.camera.moveLeft();
 			break;
 
-		case KeyEvent.VK_RIGHT:
-			camera.moveRight();
+		case KeyEvent.VK_D:
+			this.camera.moveRight();
+			break;
+
+		case KeyEvent.VK_Q:
+			this.camera.rollLeft();
+			break;
+
+		case KeyEvent.VK_E:
+			this.camera.rollRight();
 			break;
 		}
 	}

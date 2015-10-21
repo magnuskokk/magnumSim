@@ -8,7 +8,7 @@ public class Mass {
 	public float radius;
 	public Vector3D pos; // position, velocity and force
 	public Vector3D vel;
-	protected Vector3D force;
+	public Vector3D force;
 
 	public int passes;
 
@@ -27,7 +27,7 @@ public class Mass {
 	// TODO rewrite a new Planet class extending this class
 	public void checkAndFixOutOfBounds() {
 
-		int bounds = 20;
+		int bounds = 5;
 
 		if (Math.abs(this.pos.x) > bounds || Math.abs(this.pos.y) > bounds || Math.abs(this.pos.z) > bounds) {
 			this.vel.multiply(-1);

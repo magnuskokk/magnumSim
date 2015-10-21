@@ -2,17 +2,41 @@ package model.maths;
 
 public class Point3D {
 
-	public double x, y, z;
+	public float x, y, z;
 
-	public Point3D(double x, double y, double z) {
+	public Point3D(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public void multiply(double mul) {
+	public Point3D() {
+		this.x = 0;
+		this.y = 0;
+		this.z = 0;
+	}
+
+	public Point3D multiply(float mul) {
 		this.x *= mul;
 		this.y *= mul;
 		this.z *= mul;
+
+		return this;
+	}
+
+	public Point3D add(float x, float y, float z) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+
+		return this;
+	}
+
+	public Point3D subtract(float x, float y, float z) {
+		this.x -= x;
+		this.y -= y;
+		this.z -= z;
+
+		return this;
 	}
 }

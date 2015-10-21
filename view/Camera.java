@@ -3,73 +3,101 @@ package view;
 import com.jogamp.opengl.glu.GLU;
 
 import model.maths.Point3D;
-import model.maths.Vector3DWithPoints;
+import model.maths.Vector3D;
 
 public class Camera {
 
-	private Point3D eye, center;
+	private Point3D eye;
 
-	private Vector3DWithPoints vector;
+	private Vector3D vector;
+
+	private Vector3D up;
 
 	public Camera() {
-		eye = new Point3D(0.0f, 70.0f, 0.0f);
-		center = new Point3D(0.0f, 0.0f, 0.0f);
+		// Init the camera
+		this.eye = new Point3D(0.0f, 70.0f, 0.0f);
 
-		// This is the camera vector
-		vector = new Vector3DWithPoints(eye, center);
+		// This is the camera vector (center is 0,0,0)
+		this.vector = new Vector3D(-this.eye.x, -this.eye.y, -this.eye.z);
+
+		this.up = new Vector3D(0.0f, 1.0f, 1.0f);
 	}
 
 	public void moveForward() {
-		System.out.println("forward");
+		Vector3D unitVector = this.vector.getUnitVector();
+
+		this.eye.add(unitVector.x, unitVector.y, unitVector.z);
+		this.vector.subtract(unitVector);
 	}
 
 	public void moveBack() {
-		System.out.println("back");
+		Vector3D unitVector = this.vector.getUnitVector();
 
+		this.eye.add(-unitVector.x, -unitVector.y, -unitVector.z);
+		this.vector.add(unitVector);
 	}
 
 	public void moveLeft() {
-		System.out.println("left");
+		Vector3D unitVector = this.up.getUnitVector();
 
+		this.up.add(unitVector);
 	}
 
 	public void moveRight() {
-		System.out.println("right");
+		Vector3D unitVector = this.up.getUnitVector();
 
+		this.up.subtract(unitVector);
 	}
 
 	public void rotateUp() {
-		System.out.println("rotateUp");
 
 	}
 
 	public void rotateDown() {
-		System.out.println("rotateDown");
 
 	}
 
 	public void rotateLeft() {
-		System.out.println("rotateLeft");
-
+		this.rotate(1);
 	}
 
 	public void rotateRight() {
-		System.out.println("rotateRight");
-
+		this.rotate(-1);
 	}
 
-	public void zoomIn() {
-		// Make the vector shorter, so the camera moves closer
-		vector.multiply(0.9f);
-	}
+	public void rotate(int direction) {
+		double angle = direction > 0 ? -0.1 : 0.1;
 
-	public void zoomOut() {
-		// Make the vector longer, so the camera moves further
-		vector.multiply(1.1f);
+		// Rodrigues' rotation formula
+		// https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+		Vector3D copyVector = new Vector3D(this.vector);
+		Vector3D liidetav1 = copyVector.multiply(Math.cos(angle));
+
+		copyVector = new Vector3D(this.vector);
+		Vector3D liidetav2 = copyVector.vektorKorrutis(this.up);
+		liidetav2.multiply(Math.sin(angle));
+
+		copyVector = new Vector3D(this.vector);
+		Vector3D copyUpVector = new Vector3D(this.up);
+
+		float skalaarKorrutis = copyVector.skalaarKorrutis(this.up);
+		Vector3D liidetav3 = copyUpVector.multiply(skalaarKorrutis * (1 - Math.cos(angle)));
+
+		liidetav1.add(liidetav2).add(liidetav3);
+
+		this.vector = liidetav1;
 	}
 
 	public void lookAt(GLU glu) {
-		glu.gluLookAt(vector.begin.x, vector.begin.y, vector.begin.z, vector.end.x, vector.end.y, vector.end.z, 0.0,
-				0.0, 1.0);
+		glu.gluLookAt(this.eye.x, this.eye.y, this.eye.z, this.vector.x, this.vector.y, this.vector.z, this.up.x,
+				this.up.y, this.up.z);
+	}
+
+	public void rollLeft() {
+
+	}
+
+	public void rollRight() {
+
 	}
 }
