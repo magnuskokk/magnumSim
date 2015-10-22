@@ -2,10 +2,11 @@ package view;
 
 import com.jogamp.opengl.glu.GLU;
 
+import main.Config;
 import model.maths.Point3D;
 import model.maths.Vector3D;
 
-public class Camera {
+public class Camera implements Config {
 
 	private Point3D eye;
 
@@ -16,11 +17,7 @@ public class Camera {
 	private Vector3D up;
 
 	private Vector3D side;
-
-	private double rotateAngle = 0.1;
-
-	private float movingSpeed = 20.0f;
-
+	
 	public Camera() {
 		// Init the camera
 		this.eye = new Point3D(0.0f, 70.0f, 0.0f);
@@ -61,7 +58,7 @@ public class Camera {
 			break;
 		}
 
-		dir *= this.movingSpeed;
+		dir *= Config.cameraSpeed;
 
 		this.eye.add(dir * dirVector.x * (float) dt, dir * dirVector.y * (float) dt, dir * dirVector.z * (float) dt);
 		this.center.add(dir * dirVector.x * (float) dt, dir * dirVector.y * (float) dt, dir * dirVector.z * (float) dt);
@@ -103,7 +100,7 @@ public class Camera {
 			break;
 		}
 
-		this.vector.rotateAroundAxis(axis, dir * this.rotateAngle * dt);
+		this.vector.rotateAroundAxis(axis, dir * Config.cameraRotationAngle * dt);
 		calcPerp = new Vector3D(this.vector).vektorKorrutis(axis).multiply(mul);
 
 		Point3D copyEye = new Point3D(this.eye);

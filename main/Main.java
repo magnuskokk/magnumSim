@@ -16,17 +16,13 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.FPSAnimator;
 
 import model.astronomy.Space;
 import view.Camera;
 
-public class Main implements GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
+public class Main implements Config, GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
-	// rotating the scene
-
-	// remember last mouse position
 	private int oldMouseX;
 	private int oldMouseY;
 
@@ -36,14 +32,10 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public Space space;
 
-	static int fps = 60;
-
 	private long time0 = System.nanoTime();
 	private double time = 0;
 	private double lastTime = 0;
 	private double dt = 0;
-
-	private double slowMotionRatio = 100;
 
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
@@ -244,7 +236,7 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		case KeyEvent.VK_W:
 			this.camera.move(0, this.dt);
 			break;
-			
+
 		case KeyEvent.VK_D:
 			this.camera.move(1, this.dt);
 			break;

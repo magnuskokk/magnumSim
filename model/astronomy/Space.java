@@ -17,7 +17,7 @@ public class Space {
 	// public float dayofmonth = 10f;
 	private Mass[] planets;
 
-	private int numPlanets = 300;
+	private int numPlanets = 100;
 
 	static float G = 0.001f; // TODO: change this
 	
