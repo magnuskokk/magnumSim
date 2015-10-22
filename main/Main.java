@@ -36,14 +36,14 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 	public Space space;
 
-	static int fps = 120;
+	static int fps = 60;
 
 	private long time0 = System.nanoTime();
 	private double time = 0;
 	private double lastTime = 0;
 	private double dt = 0;
 
-	private double slowMotionRatio = 200;
+	private double slowMotionRatio = 100;
 
 	public static void main(String[] args) {
 		Frame frame = new Frame("Solar system");
@@ -159,10 +159,6 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
 		gl.glLoadIdentity();
 
-		// if (this.frame % fps == 0) {
-		// this.time++;
-		// }
-		//
 		this.time = (System.nanoTime() - this.time0) / 1E9; // time in seconds
 															// from the
 															// beginning
@@ -203,27 +199,27 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 	}
 
 	public void mouseDragged(MouseEvent e) {
-
-	}
-
-	public void mouseMoved(MouseEvent e) {
 		int x = e.getX();
 		int y = e.getY();
 
 		if (x > oldMouseX) {
-			this.camera.rotateRight();
+			this.camera.rotate(1, this.dt);
 		} else {
-			this.camera.rotateLeft();
+			this.camera.rotate(3, this.dt);
 		}
 
-		if (y > oldMouseY) {
-			this.camera.rotateUp();
+		if (y < oldMouseY) {
+			this.camera.rotate(0, this.dt);
 		} else {
-			this.camera.rotateDown();
+			this.camera.rotate(2, this.dt);
 		}
 
 		oldMouseX = e.getX();
 		oldMouseY = e.getY();
+	}
+
+	public void mouseMoved(MouseEvent e) {
+
 	}
 
 	@Override
@@ -246,27 +242,27 @@ public class Main implements GLEventListener, MouseListener, MouseMotionListener
 
 		switch (keyCode) {
 		case KeyEvent.VK_W:
-			this.camera.moveForward();
+			this.camera.move(0, this.dt);
+			break;
+			
+		case KeyEvent.VK_D:
+			this.camera.move(1, this.dt);
 			break;
 
 		case KeyEvent.VK_S:
-			this.camera.moveBack();
+			this.camera.move(2, this.dt);
 			break;
 
 		case KeyEvent.VK_A:
-			this.camera.moveLeft();
-			break;
-
-		case KeyEvent.VK_D:
-			this.camera.moveRight();
+			this.camera.move(3, this.dt);
 			break;
 
 		case KeyEvent.VK_Q:
-			this.camera.rollLeft();
+			this.camera.roll(-1);
 			break;
 
 		case KeyEvent.VK_E:
-			this.camera.rollRight();
+			this.camera.roll(1);
 			break;
 		}
 	}
