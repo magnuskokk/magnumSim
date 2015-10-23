@@ -3,6 +3,7 @@ package view;
 import com.jogamp.opengl.glu.GLU;
 
 import main.Config;
+import main.Main;
 import model.maths.Point3D;
 import model.maths.Vector3D;
 
@@ -106,6 +107,37 @@ public class Camera implements Config {
 		Point3D copyEye = new Point3D(this.eye);
 
 		this.center = copyEye.add(this.vector);
+	}
+	
+	public void setAutoView() {
+		// find the center of all masses
+		
+		// this is the new center
+		Point3D centerMass = Main.space.getCenterPointOfMasses();
+					
+		// now we need to move the eye
+		Vector3D moveVector = new Vector3D(centerMass, this.center);
+		
+		
+		/*
+		
+		this.eye = new Point3D(0.0f, 70.0f, 0.0f);
+		this.center = new Point3D();
+
+		// This is the camera vector (center is 0,0,0)
+		this.vector = new Vector3D(center, eye).getUnitVector();
+
+		// Z is up
+		this.up = new Vector3D(0.0f, 0.0f, 1.0f);
+
+		this.side = new Vector3D(this.vector).vektorKorrutis(this.up).getUnitVector();
+	*/
+		
+		this.center = centerMass;
+		
+		this.eye.add(moveVector);
+		
+		this.vector = new Vector3D(center, eye).getUnitVector();		
 	}
 
 	public void lookAt(GLU glu) {

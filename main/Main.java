@@ -30,7 +30,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
 	public Camera camera = null;
 
-	public Space space;
+	public static Space space;
 
 	private long time0 = System.nanoTime();
 	private double time = 0;

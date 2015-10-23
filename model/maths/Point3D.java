@@ -31,6 +31,14 @@ public class Point3D {
 
 		return this;
 	}
+	
+	public Point3D divide(float mul) {
+		this.x /= mul;
+		this.y /= mul;
+		this.z /= mul;
+
+		return this;
+	}
 
 	public Point3D add(float x, float y, float z) {
 		this.x += x;
