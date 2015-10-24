@@ -6,19 +6,17 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
-import main.someMaterials;
+import main.Config;
 import model.maths.Point3D;
 import model.maths.Vector3D;
 import model.physics.Mass;
 
-public class Space {
+public class Space implements Config {
 	//
 	// public float hourofday = 0f;
 	// public float dayofyear = 0f;
 	// public float dayofmonth = 10f;
 	private Mass[] planets;
-
-	private int numPlanets = 100;
 
 	static float G = 0.001f; // TODO: change this
 
@@ -29,13 +27,13 @@ public class Space {
 		// Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
 		// Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
 
-		this.colors = new float[numPlanets][10];
+		this.colors = new float[Config.numPlanets][10];
 
 		Random rand = new Random();
 
-		this.planets = new Mass[this.numPlanets];
+		this.planets = new Mass[Config.numPlanets];
 
-		for (int i = 0; i < this.numPlanets; i++) {
+		for (int i = 0; i < Config.numPlanets; i++) {
 			int randomX = rand.nextInt((20));
 			int randomY = rand.nextInt((10));
 			int randomZ = rand.nextInt((15));
@@ -78,11 +76,11 @@ public class Space {
 		 * applied to them
 		 */
 
-		for (int i = 0; i < this.numPlanets; i++) {
+		for (int i = 0; i < Config.numPlanets; i++) {
 
 			// Find all gravitational forces which attract a single planet
 
-			for (int j = 0; j < this.numPlanets; j++) {
+			for (int j = 0; j < Config.numPlanets; j++) {
 				if (i != j) {
 
 					float distanceVectorX = planets[j].pos.x - planets[i].pos.x;
@@ -164,7 +162,7 @@ public class Space {
 		// Here the calculations are made, time to draw to the screen
 
 		GLU glu = new GLU(); // needed for lookat
-		for (int i = 0; i < this.numPlanets; i++) {
+		for (int i = 0; i < Config.numPlanets; i++) {
 
 			GLUquadric glpQ = glu.gluNewQuadric();
 
@@ -194,16 +192,23 @@ public class Space {
 
 	}
 
-	public Point3D getCenterPointOfMasses() {
-		Point3D centerPoint = new Point3D();
+	public Point3D getCenterPoint() {
+		Point3D allPoints = new Point3D();
 
-		for (int i = 0; i < this.planets.length; i++) {
-			centerPoint.add(this.planets[i].pos);
+		float allMasses = 0;
+
+		for (int i = 0; i < Config.numPlanets; i++) {
+			allMasses += this.planets[i].mass;
+
+			Point3D pos = new Point3D(this.planets[i].pos.getAsPoint());
+
+			pos.multiply(this.planets[i].mass);
+			allPoints.add(pos);
 		}
 
-		centerPoint.divide(this.planets.length);
+		allPoints.divide(allMasses);
 
-		return centerPoint;
+		return allPoints;
 	}
 
 	/**

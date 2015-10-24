@@ -48,6 +48,14 @@ public class Point3D {
 		return this;
 	}
 	
+	public Point3D add(Point3D point) {
+		this.x += point.x;
+		this.y += point.y;
+		this.z += point.z;
+
+		return this;
+	}
+	
 	public Point3D add(Vector3D vector) {
 		this.x += vector.x;
 		this.y += vector.y;

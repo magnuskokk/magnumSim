@@ -18,6 +18,8 @@ public class Camera implements Config {
 	private Vector3D up;
 
 	private Vector3D side;
+
+	private Point3D previousCenter;
 	
 	public Camera() {
 		// Init the camera
@@ -110,34 +112,65 @@ public class Camera implements Config {
 	}
 	
 	public void setAutoView() {
-		// find the center of all masses
 		
-		// this is the new center
-		Point3D centerMass = Main.space.getCenterPointOfMasses();
-					
-		// now we need to move the eye
+		
+		this.previousCenter = this.center;
+		// find the center of all masses
+//		
+//		// this is the new center
+		Point3D centerMass = Main.space.getCenterPoint();
+		
+
+		
+	//	this.center = centerMass;
+		
+		
+//					
+//		// how much the center moved
 		Vector3D moveVector = new Vector3D(centerMass, this.center);
 		
-		
-		/*
-		
-		this.eye = new Point3D(0.0f, 70.0f, 0.0f);
-		this.center = new Point3D();
+		System.out.println(moveVector.x);
+		System.out.println(moveVector.y);
+		System.out.println(moveVector.z);
 
-		// This is the camera vector (center is 0,0,0)
-		this.vector = new Vector3D(center, eye).getUnitVector();
-
-		// Z is up
-		this.up = new Vector3D(0.0f, 0.0f, 1.0f);
-
-		this.side = new Vector3D(this.vector).vektorKorrutis(this.up).getUnitVector();
-	*/
-		
 		this.center = centerMass;
+	//	this.eye.add(moveVector);
+//		
+		this.vector = new Vector3D(this.center, this.eye).getUnitVector();		
+
 		
-		this.eye.add(moveVector);
 		
-		this.vector = new Vector3D(center, eye).getUnitVector();		
+//		
+//		
+//		/*
+//		
+//		this.eye = new Point3D(0.0f, 70.0f, 0.0f);
+//		this.center = new Point3D();
+//
+//		// This is the camera vector (center is 0,0,0)
+//		this.vector = new Vector3D(center, eye).getUnitVector();
+//
+//		// Z is up
+//		this.up = new Vector3D(0.0f, 0.0f, 1.0f);
+//
+//		this.side = new Vector3D(this.vector).vektorKorrutis(this.up).getUnitVector();
+//	*/
+//		
+//		this.previousCenter = this.center;
+//		
+//		
+//		this.center = centerMass;
+//		
+//		
+//		Vector3D moveCenter = new Vector3D(this.center, this.previousCenter).getUnitVector();
+//		
+//			
+//		this.eye.add(moveCenter);
+//		
+//		
+//		//this.eye.add(moveVector.multiply(-1));
+//		
+//		this.vector = new Vector3D(center, eye).getUnitVector();		
 	}
 
 	public void lookAt(GLU glu) {

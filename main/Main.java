@@ -120,7 +120,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 		gl.glEnable(GL2.GL_NORMALIZE);
 
 		this.camera = new Camera();
-		this.space = new Space();
+		Main.space = new Space();
 
 	}
 
@@ -157,8 +157,9 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 		this.dt = this.time - this.lastTime; // time of last loop
 		this.lastTime = this.time;
 
+		//this.camera.setAutoView();
 		this.camera.lookAt(glu);
-		this.space.simulate(gl, this.dt / this.slowMotionRatio);
+		Main.space.simulate(gl, this.dt / Config.slowMotionRatio);
 
 		gl.glFlush();
 	}
