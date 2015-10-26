@@ -3,4 +3,6 @@
 /dist/
 /build.xml
 /manifest.mf
-
+/.classpath
+/.project
+/bin/
