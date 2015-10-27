@@ -1,13 +1,13 @@
 package model.astronomy;
 
-import java.util.Random;
-
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
-
 import main.Config;
 import model.maths.Point3D;
 import model.maths.Vector3D;
+import view.Camera;
+
+import java.util.Random;
 
 public class Space implements Config {
     //
@@ -46,7 +46,7 @@ public class Space implements Config {
                 mul = -1;
             }
 //Vector3D pos = new Vector3D();
-            Vector3D pos = new Vector3D((float) Math.sin(randomX ^ 2) * 0.1f, (float) Math.cos(randomY), (float) randomZ * mul);
+            Vector3D pos = new Vector3D((float) Math.sin(randomX ^ 2), (float) Math.cos(randomY), (float) randomZ * mul);
             Vector3D vel = new Vector3D((float) Math.random(), (float) Math.random(), (float) Math.random());
 
             // Vector3D vel = new Vector3D();
@@ -103,32 +103,34 @@ public class Space implements Config {
                         // if the planets are far enough (not side by side)
                         if (distanceVector.length() > (this.planets[i].radius + this.planets[j].radius)) {
                             forceVector = unitVector.multiply(forceBetween);
+
+                            planets[i].applyForce(forceVector);
+
+                            this.planets[i].solve(dt);
                         } else {
 
-                            System.out.println("coll");
+                            //System.out.println("coll");
 
                             //TODO write methods
-                            //  this.planets[i].mass += this.planets[j].mass;
-//                            Vector3D pos1 = new Vector3D(this.planets[i].pos);
-//                            Vector3D pos2 = new Vector3D(this.planets[j].pos);
-//
-//                            pos1.multiply(this.planets[i].mass);
-//                            pos2.multiply(this.planets[j].mass);
-//
-//                            this.planets[i].pos = pos1.add(pos2).divide(this.planets[i].mass + this.planets[j].mass);
-//                            this.planets[i].vel.add(this.planets[j].vel);
-//                            this.planets[i].radius += this.planets[j].radius;
-//                            this.planets[i].mass += this.planets[j].mass;
-//
-//                            this.planets[j] = null;
-//
-//                            if (this.realNumPlanets > 1) {
-//                                this.realNumPlanets--;
-//                            }
-                            for (int k = j; k < this.planets.length - j - 1; k++) {
+                        /*    this.planets[i].mass += this.planets[j].mass;
+                            Vector3D pos1 = new Vector3D(this.planets[i].pos);
+                            Vector3D pos2 = new Vector3D(this.planets[j].pos);
 
-                                // this.planets[k] = this.planets[k + 1];
+                            pos1.multiply(this.planets[i].mass);
+                            pos2.multiply(this.planets[j].mass);
+
+                            this.planets[i].pos = pos1.add(pos2).divide(this.planets[i].mass + this.planets[j].mass);
+                            this.planets[i].vel.add(this.planets[j].vel);
+                            this.planets[i].radius += this.planets[j].radius;
+                            this.planets[i].mass += this.planets[j].mass;
+
+                            if (this.realNumPlanets > 1) {
+                                this.realNumPlanets--;
                             }
+                            for (int k = j; k < this.planets.length - 1; k++) {
+
+                                 this.planets[k] = this.planets[k + 1];
+                            }*/
 
                             // we have a collision
                             // va1 = ( v1 * (m1 - m2) + 2 * m2 * v2 ) / ( m1 + m2 )
@@ -174,9 +176,7 @@ public class Space implements Config {
                             //
                         }
 
-                        planets[i].applyForce(forceVector);
 
-                        this.planets[i].solve(dt);
                     }
                 }
             }
@@ -189,6 +189,45 @@ public class Space implements Config {
                 this.planets[i].drawOnScreen(gl);
             }
         }
+
+
+       // Vector3D camVector = new Vector3D(Camera.center, Camera.eye);
+
+  /*      Point3D newPoint = this.getCenterOfMass();
+
+        Vector3D movement = new Vector3D(newPoint, Camera.center);
+
+        Camera.center = newPoint;*/
+       // Camera.eye.add(movement);
+
+        //Camera.vector = new Vector3D(Camera.center, Camera.eye);
+
+/*
+        Point3D center = this.getHeaviestPlanet();
+
+        Camera.center = center;
+
+        Point3D centerCopy = new Point3D(center);
+
+        Camera.eye = centerCopy.multiply(10);*/
+    }
+
+    public Point3D getHeaviestPlanet() {
+        float mass = 0;
+        Point3D point = null;
+
+
+        for (int i = 0; i < this.realNumPlanets; i++) {
+            if (this.planets[i].mass > mass) {
+                mass = this.planets[i].mass;
+                point = new Point3D(this.planets[i].pos.getAsPoint());
+            }
+
+        }
+
+        return point;
+
+
     }
 
     public Point3D getCenterOfMass() {
