@@ -70,7 +70,6 @@ public class Camera implements Config {
         switch (direction) {
             case 0: // Rotate up
                 this.center.rotateAround(this.eye, sideAxis, 0.01);
-               // this.up = new Vector3D(this.center, this.eye).vektorKorrutis(sideAxis).toUnitVector();
                 break;
 
             case 1: // Rotate right
@@ -79,7 +78,6 @@ public class Camera implements Config {
 
             case 2: // Rotate down
                 this.center.rotateAround(this.eye, sideAxis, -0.01);
-                //this.up = new Vector3D(this.center, this.eye).vektorKorrutis(sideAxis).toUnitVector();
                 break;
 
             case 3: // Rotate left
@@ -89,6 +87,18 @@ public class Camera implements Config {
     }
 
     public void roll(int direction) {
+        // We need to rotate the up vector
+        Vector3D axis = new Vector3D(this.center, this.eye);
 
+        switch (direction) {
+            case 1: // Roll to the right
+                this.up.rotateAroundAxis(axis, -0.001);
+                break;
+
+
+            case -1: // Roll to the left
+                this.up.rotateAroundAxis(axis, 0.001);
+                break;
+        }
     }
 }
