@@ -38,16 +38,23 @@ public class Camera implements Config {
         Main.gl.glLoadIdentity();
     }
 
-    public void move(int direction, double dt) {
-        int dir = 0;
-        Vector3D dirVector = null;
+    public Vector3D getDirVector() {
+        return new Vector3D(this.center, this.eye).toUnitVector();
+    }
 
+    public Vector3D getSideVector() {
+        return new Vector3D(this.center, this.eye).vektorKorrutis(this.up).toUnitVector();
+    }
+
+    public void move(int direction, double dt) {
         switch (direction) {
             case 0: // Move forward
                 this.zoomLevel *= 0.9f;
                 break;
 
             case 1: // Move right
+                this.center.add(this.getSideVector());
+                this.eye.add(this.getSideVector());
                 break;
 
             case 2: // Move back
@@ -55,6 +62,8 @@ public class Camera implements Config {
                 break;
 
             case 3: // Move left
+                this.center.subtract(this.getSideVector());
+                this.eye.subtract(this.getSideVector());
                 break;
         }
     }
