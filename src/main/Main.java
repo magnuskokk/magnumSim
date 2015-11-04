@@ -37,6 +37,9 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
     private double lastTime = 0;
     private double dt = 0;
 
+    public static GL2 gl;
+    public static GLU glu;
+
     public static void main(String[] args) {
         Frame frame = new Frame("Solar system");
         GLCanvas canvas = new GLCanvas();
@@ -52,7 +55,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
         canvas.addGLEventListener(listener);
         frame.add(canvas);
-        frame.setSize(1000, 750);
+        frame.setSize(Config.frameWidth, Config.frameHeight);
 
         frame.addWindowListener(new WindowAdapter() {
 
@@ -82,7 +85,8 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
     }
 
     public void init(GLAutoDrawable drawable) {
-        GL2 gl = drawable.getGL().getGL2();
+        gl = drawable.getGL().getGL2();
+        glu = new GLU();
 
         // prepare ligthsource
         float ambient[] = {0.4f, 0.4f, 0.4f, 1.0f};
@@ -120,15 +124,10 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glEnable(GL2.GL_NORMALIZE);
 
         this.camera = new Camera();
-        Main.space = new Space();
-
-        GLU glu = new GLU();
+        space = new Space();
     }
 
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        GL2 gl = drawable.getGL().getGL2();
-        GLU glu = new GLU();
-
         if (height <= 0) // no divide by zero
         {
             height = 1;
@@ -148,9 +147,6 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
      * This method is called in every frame
      */
     public void display(GLAutoDrawable drawable) {
-
-        GL2 gl = drawable.getGL().getGL2();
-        GLU glu = new GLU(); // needed for lookat
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
         gl.glClearColor(0, 0, 0, 1);
         gl.glLoadIdentity();
@@ -160,8 +156,10 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         // beginning
         this.dt = this.time - this.lastTime; // time of last loop
         this.lastTime = this.time;
-        this.camera.lookAt(glu);
-        Main.space.simulate(gl, this.dt / Config.slowMotionRatio);
+
+        this.camera.setCamera();
+
+        Main.space.simulate(this.dt / Config.slowMotionRatio);
 
         gl.glFlush();
     }

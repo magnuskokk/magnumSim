@@ -1,11 +1,8 @@
 package model.astronomy;
 
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 import main.Config;
 import model.maths.Point3D;
 import model.maths.Vector3D;
-import view.Camera;
 
 import java.util.Random;
 
@@ -45,22 +42,23 @@ public class Space implements Config {
             } else {
                 mul = -1;
             }
-//Vector3D pos = new Vector3D();
+
             Vector3D pos = new Vector3D((float) Math.sin(randomX ^ 2), (float) Math.cos(randomY), (float) randomZ * mul);
             Vector3D vel = new Vector3D((float) Math.random(), (float) Math.random(), (float) Math.random());
 
+            //Vector3D pos = new Vector3D();
             // Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
-            float massRadius = (float) Math.random();
+            double massRadius = Math.random();
 
-            this.planets[i] = new Planet(massRadius * 80, massRadius, pos, vel, force);
+            this.planets[i] = new Planet(massRadius, massRadius, pos, vel, force);
             this.planets[i].passes = 0;
 
             // TODO: random colors atm, make some classes orsmth
             this.planets[i].mass *= 100;
-            this.planets[i].pos.multiply(50);
-            this.planets[i].vel.multiply(10);
+            this.planets[i].pos.multiply(100);
+            this.planets[i].vel.multiply(5);
             //  this.planets[i].pos.multiply(10);
 
         }
@@ -70,7 +68,7 @@ public class Space implements Config {
     /**
      * This method is called from Main.display() every frame
      */
-    public void simulate(GL2 gl, double dt) {
+    public void simulate(double dt) {
         /*
          * Basically we need to iterate through all the planets and calculate
          * their new position and velocity vectors according to the force
@@ -87,14 +85,14 @@ public class Space implements Config {
                 for (int j = 0; j < this.realNumPlanets; j++) {
                     if (i != j && this.planets[j] != null) {
 
-                        float distanceVectorX = this.planets[j].pos.x - this.planets[i].pos.x;
-                        float distanceVectorY = this.planets[j].pos.y - this.planets[i].pos.y;
-                        float distanceVectorZ = this.planets[j].pos.z - this.planets[i].pos.z;
+                        double distanceVectorX = this.planets[j].pos.x - this.planets[i].pos.x;
+                        double distanceVectorY = this.planets[j].pos.y - this.planets[i].pos.y;
+                        double distanceVectorZ = this.planets[j].pos.z - this.planets[i].pos.z;
 
                         Vector3D distanceVector = new Vector3D(distanceVectorX, distanceVectorY, distanceVectorZ);
 
-                        float forceBetween = (G * this.planets[i].mass * this.planets[j].mass)
-                                / ((float) Math.pow(distanceVector.length(), 2));
+                        double forceBetween = (G * this.planets[i].mass * this.planets[j].mass)
+                                / (Math.pow(distanceVector.length(), 2));
 
                         Vector3D unitVector = distanceVector.getUnitVector();
 
@@ -183,22 +181,29 @@ public class Space implements Config {
         }
 
         // Here the calculations are made, time to draw to the screen
-        GLU glu = new GLU(); // needed for lookat
         for (int i = 0; i < this.realNumPlanets; i++) {
             if (this.planets[i] != null) {
-                this.planets[i].drawOnScreen(gl);
+                this.planets[i].drawOnScreen();
             }
         }
 
 
-       // Vector3D camVector = new Vector3D(Camera.center, Camera.eye);
+        Point3D heaviestPlanetPos = this.getHeaviestPlanet();
+
+        //System.out.println(heaviestPlanetPos.x);
+
+     /*   Camera.center = heaviestPlanetPos;
+        Camera.eye = heaviestPlanetPos.multiply(3);
+*/
+
+        // Vector3D camVector = new Vector3D(Camera.center, Camera.eye);
 
   /*      Point3D newPoint = this.getCenterOfMass();
 
         Vector3D movement = new Vector3D(newPoint, Camera.center);
 
         Camera.center = newPoint;*/
-       // Camera.eye.add(movement);
+        // Camera.eye.add(movement);
 
         //Camera.vector = new Vector3D(Camera.center, Camera.eye);
 
@@ -213,7 +218,7 @@ public class Space implements Config {
     }
 
     public Point3D getHeaviestPlanet() {
-        float mass = 0;
+        double mass = 0;
         Point3D point = null;
 
 

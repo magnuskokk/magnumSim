@@ -4,14 +4,14 @@ import model.maths.Vector3D;
 
 public class PointMass {
 
-    public float mass; // mass
+    public double mass; // mass
     public Vector3D pos; // position, velocity and force
     public Vector3D vel;
     public Vector3D force;
 
     public int passes;
 
-    public PointMass(float mass, Vector3D pos, Vector3D vel, Vector3D force) {
+    public PointMass(double mass, Vector3D pos, Vector3D vel, Vector3D force) {
         this.mass = mass;
         this.pos = pos;
         this.vel = vel;

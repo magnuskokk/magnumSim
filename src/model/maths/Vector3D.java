@@ -2,10 +2,10 @@ package model.maths;
 
 public class Vector3D {
 
-    public float x, y, z;
+    public double x, y, z;
 
     // Define by vector coordinates
-    public Vector3D(float d, float e, float f) {
+    public Vector3D(double d, double e, double f) {
         this.x = d;
         this.y = e;
         this.z = f;
@@ -40,7 +40,7 @@ public class Vector3D {
         return this;
     }
 
-    public Vector3D divide(float scalar) {
+    public Vector3D divide(double scalar) {
         this.x /= scalar;
         this.y /= scalar;
         this.z /= scalar;
@@ -68,16 +68,16 @@ public class Vector3D {
         return new Point3D(this.x, this.y, this.x);
     }
 
-    public float skalaarKorrutis(Vector3D vector) {
-        float skalaarKorrutis = this.x * vector.x + this.y * vector.y + this.z * vector.z;
+    public double skalaarKorrutis(Vector3D vector) {
+        double skalaarKorrutis = this.x * vector.x + this.y * vector.y + this.z * vector.z;
 
         return skalaarKorrutis;
     }
 
     public Vector3D vektorKorrutis(Vector3D vector) {
-        float Mx = this.y * vector.z - this.z * vector.y;
-        float My = this.z * vector.x - this.x * vector.z;
-        float Mz = this.x * vector.y - this.y * vector.x;
+        double Mx = this.y * vector.z - this.z * vector.y;
+        double My = this.z * vector.x - this.x * vector.z;
+        double Mz = this.x * vector.y - this.y * vector.x;
 
         this.x = Mx;
         this.y = My;
@@ -95,10 +95,10 @@ public class Vector3D {
         return copyVector.skalaarKorrutis(vector) == 0 ? true : false;
     }
 
-    public float getAngleCosTo(Vector3D vector) {
+    public double getAngleCosTo(Vector3D vector) {
         Vector3D copyVector = new Vector3D(this);
 
-        float angleCos = copyVector.skalaarKorrutis(vector) / (copyVector.length() * vector.length());
+        double angleCos = copyVector.skalaarKorrutis(vector) / (copyVector.length() * vector.length());
 
         return angleCos;
     }
@@ -109,8 +109,18 @@ public class Vector3D {
         return vector.divide(vector.length());
     }
 
-    public float length() {
-        return (float) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+    public Vector3D toUnitVector() {
+        Vector3D unitVector = this.getUnitVector();
+
+        this.x = unitVector.x;
+        this.y = unitVector.y;
+        this.z = unitVector.z;
+
+        return this;
+    }
+
+    public double length() {
+        return (double) Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
     }
 
     public Vector3D rotateAroundAxis(Vector3D axis, double angle) {
@@ -127,7 +137,7 @@ public class Vector3D {
         copyVector = new Vector3D(this);
         Vector3D copyAxisVector = new Vector3D(axis);
 
-        float skalaarKorrutis = copyVector.skalaarKorrutis(axis);
+        double skalaarKorrutis = copyVector.skalaarKorrutis(axis);
         Vector3D liidetav3 = copyAxisVector.multiply(skalaarKorrutis * (1 - Math.cos(angle)));
 
         liidetav1.add(liidetav2).add(liidetav3);

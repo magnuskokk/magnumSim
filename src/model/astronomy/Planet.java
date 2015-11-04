@@ -8,6 +8,7 @@ package model.astronomy;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
+import main.Main;
 import model.maths.Vector3D;
 import model.physics.PointMass;
 
@@ -17,14 +18,14 @@ import model.physics.PointMass;
  */
 public class Planet extends PointMass {
 
-    public float radius;
+    public double radius;
 
     private final float amb[];
     private final float diff[];
     private final float spec[];
     private final float shine;
 
-    public Planet(float mass, float radius, Vector3D pos, Vector3D vel, Vector3D force) {
+    public Planet(double mass, double radius, Vector3D pos, Vector3D vel, Vector3D force) {
         super(mass, pos, vel, force);
 
         this.radius = radius;
@@ -45,26 +46,24 @@ public class Planet extends PointMass {
         this.spec[3] = 1.0f;
     }
 
-    public void drawOnScreen(GL2 gl) {
-        GLU glu = new GLU();
-        GLUquadric glpQ = glu.gluNewQuadric();
+    public void drawOnScreen() {
+        GLUquadric glpQ = Main.glu.gluNewQuadric();
 
-        gl.glPushMatrix();
+        Main.gl.glPushMatrix();
         {
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, this.amb, 0);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, this.diff, 0);
-            gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, this.spec, 0);
-            gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, this.shine * 128.0f);
+            Main.gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, this.amb, 0);
+            Main.gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, this.diff, 0);
+            Main.gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, this.spec, 0);
+            Main.gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, this.shine * 128.0f);
 
             // someMaterials.setMaterialGoldenSun(gl);
-            gl.glColor4f(1f, 1f, 1f, 1f);
-            gl.glTranslatef((float) this.pos.x, (float) this.pos.y,
-                    (float) this.pos.z);
+            Main.gl.glColor4f(1f, 1f, 1f, 1f);
+            Main.gl.glTranslated(this.pos.x, this.pos.y, this.pos.z);
 
-            glu.gluSphere(glpQ, this.radius, 10, 10);
+            Main.glu.gluSphere(glpQ, this.radius, 10, 10);
 
         }
-        gl.glPopMatrix();
+        Main.gl.glPopMatrix();
 
     }
 }
