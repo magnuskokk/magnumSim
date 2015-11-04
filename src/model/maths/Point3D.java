@@ -2,6 +2,7 @@ package model.maths;
 
 public class Point3D {
 
+    public static Point3D zeroPoint = new Point3D();
     public double x, y, z;
 
     /**

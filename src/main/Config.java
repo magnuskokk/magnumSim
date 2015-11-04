@@ -4,8 +4,8 @@ public interface Config {
 
     int fps = 60;
 
-    double slowMotionRatio = 1;
-    int numPlanets = 50;
+    double speedPercent = 200;
+    int numPlanets = 100;
 
     int frameWidth = 1000;
     int frameHeight = 700;

@@ -2,6 +2,7 @@ package model.maths;
 
 public class Vector3D {
 
+    public static Vector3D zeroVector = new Vector3D();
     public double x, y, z;
 
     /**
@@ -83,6 +84,20 @@ public class Vector3D {
         this.x += vector.x;
         this.y += vector.y;
         this.z += vector.z;
+
+        return this;
+    }
+
+    /**
+     * Subtract a vector
+     *
+     * @param vector Vector
+     * @return The new vector
+     */
+    public Vector3D subtract(Vector3D vector) {
+        this.x -= vector.x;
+        this.y -= vector.y;
+        this.z -= vector.z;
 
         return this;
     }
@@ -182,5 +197,9 @@ public class Vector3D {
         this.z = liidetav1.z;
 
         return this;
+    }
+
+    public Point3D toPoint() {
+        return new Point3D(this.x, this.y, this.z);
     }
 }

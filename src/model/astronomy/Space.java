@@ -11,10 +11,12 @@ public class Space implements Config {
     // public float dayofyear = 0f;
     // public float dayofmonth = 10f;
 
+    public static Vector3D moveVector;
     static float G = 0.001f; // TODO: change this
     private Planet[] planets;
     // public float[][] colors;
     private int realNumPlanets;
+    private Vector3D centerOfMass = new Vector3D();
 
     /**
      * Class constructor
@@ -40,9 +42,10 @@ public class Space implements Config {
             }
 
             Vector3D pos = new Vector3D(Math.sin(randomX ^ 2), -Math.cos(randomY) * mul, Math.cos(randomZ) * mul);
+            Vector3D vel = new Vector3D(Math.cos(Math.pow(randomX, 2 * mul)), -Math.sin(randomY) * mul, Math.tan(randomZ));
 
             //Vector3D pos = new Vector3D();
-            Vector3D vel = new Vector3D();
+            // Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
             double mass = Math.random();
@@ -50,8 +53,8 @@ public class Space implements Config {
 
             // This is the star
             if (i == 0) {
-                mass = 3.0;
-                radius = mass * 0.5;
+                mass = 2.0;
+                radius = mass * 0.3;
                 pos = new Vector3D();
             }
 
@@ -100,9 +103,11 @@ public class Space implements Config {
                         if (distanceVector.length() > (this.planets[i].radius + this.planets[j].radius)) {
                             Vector3D forceVector = unitVector.multiply(forceBetween);
 
-                            planets[i].applyForce(forceVector);
+                            if (i != 0) {
+                                planets[i].applyForce(forceVector);
 
-                            this.planets[i].solve(dt);
+                                this.planets[i].solve(dt);
+                            }
                         } else {
 
                             //System.out.println("coll");
@@ -186,34 +191,9 @@ public class Space implements Config {
             }
         }
 
-
-        //   Point3D heaviestPlanetPos = this.getHeaviestPlanet();
-
-        //System.out.println(heaviestPlanetPos.x);
-
-     /*   Camera.center = heaviestPlanetPos;
-        Camera.eye = heaviestPlanetPos.multiply(3);
-*/
-
-        // Vector3D camVector = new Vector3D(Camera.center, Camera.eye);
-
-  /*      Point3D newPoint = this.getCenterOfMass();
-
-        Vector3D movement = new Vector3D(newPoint, Camera.center);
-
-        Camera.center = newPoint;*/
-        // Camera.eye.add(movement);
-
-        //Camera.vector = new Vector3D(Camera.center, Camera.eye);
-
-/*
-        Point3D center = this.getHeaviestPlanet();
-
-        Camera.center = center;
-
-        Point3D centerCopy = new Point3D(center);
-
-        Camera.eye = centerCopy.multiply(10);*/
+        // Set the center back to the star
+        // Camera.center = planets[0].pos.toPoint();
+        // Camera.eye = new Point3D(0.0, 0.0, Camera.center.z + 70.0);
     }
 
     /**
@@ -236,12 +216,12 @@ public class Space implements Config {
     }
 
     public Vector3D getCenterOfMass() {
-        Vector3D allPoints = new Vector3D();
+        Vector3D allPos = new Vector3D();
 
         float allMasses = 0;
 
         for (int i = 0; i < this.realNumPlanets; i++) {
-            // allMasses += this.planets[i].vel.length();
+            allMasses += this.planets[i].mass;
 
             if (this.planets[i] != null) {
                 //TODO maybe exceptions here
@@ -250,14 +230,13 @@ public class Space implements Config {
                 Vector3D pos = new Vector3D(this.planets[i].pos);
 
                 pos.multiply(this.planets[i].mass);
-                allPoints.add(pos);
-
+                allPos.add(pos);
             }
 
         }
 
-        allPoints.divide(allMasses);
+        allPos.divide(allMasses);
 
-        return allPoints;
+        return allPos;
     }
 }

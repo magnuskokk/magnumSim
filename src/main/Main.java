@@ -159,7 +159,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         this.dt = this.time - this.lastTime; // time of last loop
         this.lastTime = this.time;
 
-        Main.space.simulate(this.dt / Config.slowMotionRatio);
+        Main.space.simulate(this.dt * Config.speedPercent/100);
 
         this.camera.setCamera();
 
