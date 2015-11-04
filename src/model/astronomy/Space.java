@@ -19,11 +19,10 @@ public class Space implements Config {
     // public float[][] colors;
     private int realNumPlanets;
 
+    /**
+     * Class constructor
+     */
     public Space() {
-        // Vector3D pos = new Vector3D(0.0f, 0.0f, 5.0f);
-        // Vector3D vel = new Vector3D(0.0f, 0.0f, 0.0f);
-        // Vector3D force = new Vector3D(0.0f, 0.0f, -0.098f);
-
         this.realNumPlanets = Config.numPlanets;
 
         Random rand = new Random();
@@ -66,7 +65,9 @@ public class Space implements Config {
     }
 
     /**
-     * This method is called from Main.display() every frame
+     * This method is called from <code>Main.display()</code> every frame.
+     * It iterates through all planets and calculates the forces applied to them
+     * @param dt Time passed since the last frame
      */
     public void simulate(double dt) {
         /*
@@ -78,8 +79,6 @@ public class Space implements Config {
         for (int i = 0; i < this.realNumPlanets; i++) {
 
             if (this.planets[i] != null) {
-
-                Point3D oldPoint = new Point3D(this.planets[i].pos.getAsPoint());
 
                 // Find all gravitational forces which attract a single planet
                 for (int j = 0; j < this.realNumPlanets; j++) {
@@ -96,11 +95,9 @@ public class Space implements Config {
 
                         Vector3D unitVector = distanceVector.getUnitVector();
 
-                        Vector3D forceVector = new Vector3D();
-
                         // if the planets are far enough (not side by side)
                         if (distanceVector.length() > (this.planets[i].radius + this.planets[j].radius)) {
-                            forceVector = unitVector.multiply(forceBetween);
+                            Vector3D forceVector = unitVector.multiply(forceBetween);
 
                             planets[i].applyForce(forceVector);
 
@@ -110,6 +107,7 @@ public class Space implements Config {
                             //System.out.println("coll");
 
                             //TODO write methods
+                            //Below comment merges planets as they touch
                         /*    this.planets[i].mass += this.planets[j].mass;
                             Vector3D pos1 = new Vector3D(this.planets[i].pos);
                             Vector3D pos2 = new Vector3D(this.planets[j].pos);
@@ -188,7 +186,7 @@ public class Space implements Config {
         }
 
 
-        Point3D heaviestPlanetPos = this.getHeaviestPlanet();
+     //   Point3D heaviestPlanetPos = this.getHeaviestPlanet();
 
         //System.out.println(heaviestPlanetPos.x);
 
@@ -217,26 +215,27 @@ public class Space implements Config {
         Camera.eye = centerCopy.multiply(10);*/
     }
 
-    public Point3D getHeaviestPlanet() {
+    /**
+     * @return The position of the heaviest planet
+     */
+    public Vector3D getHeaviestPlanet() {
         double mass = 0;
-        Point3D point = null;
+        Vector3D pos = null;
 
 
         for (int i = 0; i < this.realNumPlanets; i++) {
             if (this.planets[i].mass > mass) {
                 mass = this.planets[i].mass;
-                point = new Point3D(this.planets[i].pos.getAsPoint());
+                pos = new Vector3D(this.planets[i].pos);
             }
 
         }
 
-        return point;
-
-
+        return pos;
     }
 
-    public Point3D getCenterOfMass() {
-        Point3D allPoints = new Point3D();
+    public Vector3D getCenterOfMass() {
+        Vector3D allPoints = new Vector3D();
 
         float allMasses = 0;
 

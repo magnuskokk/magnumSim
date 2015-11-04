@@ -4,12 +4,22 @@ public class Point3D {
 
     public double x, y, z;
 
+    /**
+     * Point constructor
+     *
+     * @param x x-value
+     * @param y y-value
+     * @param z z-value
+     */
     public Point3D(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     * Zero-point constructor
+     */
     public Point3D() {
         this.x = 0;
         this.y = 0;
@@ -23,38 +33,11 @@ public class Point3D {
         this(point.x, point.y, point.z);
     }
 
-    public Point3D multiply(double mul) {
-        this.x *= mul;
-        this.y *= mul;
-        this.z *= mul;
-
-        return this;
-    }
-
-    public Point3D divide(double mul) {
-        this.x /= mul;
-        this.y /= mul;
-        this.z /= mul;
-
-        return this;
-    }
-
-    public Point3D add(double x, double y, double z) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
-
-        return this;
-    }
-
-    public Point3D add(Point3D point) {
-        this.x += point.x;
-        this.y += point.y;
-        this.z += point.z;
-
-        return this;
-    }
-
+    /**
+     * Add a vector to this point (move)
+     * @param vector Vector
+     * @return The new point
+     */
     public Point3D add(Vector3D vector) {
         this.x += vector.x;
         this.y += vector.y;
@@ -64,7 +47,26 @@ public class Point3D {
     }
 
     /**
-     * @return
+     * Subtract a vector from this point (move)
+     * @param vector
+     * @return The new point
+     */
+    public Point3D subtract(Vector3D vector) {
+        this.x -= vector.x;
+        this.y -= vector.y;
+        this.z -= vector.z;
+
+        return this;
+    }
+
+    /**
+     * Rotates this point about the line through point p with direction vector dir (must be unit vector)
+     * by an angle
+     * Formula from here: https://sites.google.com/site/glennmurray/Home/rotation-matrices-and-formulas
+     * @param p A point on the rotation axis
+     * @param dir Direction of the rotation axis
+     * @param angle Angle to rotate by
+     * @return The new point
      */
     public Point3D rotateAround(Point3D p, Vector3D dir, double angle) {
         double a = p.x;
@@ -99,21 +101,4 @@ public class Point3D {
 
         return this;
     }
-
-    public Point3D subtract(double x, double y, double z) {
-        this.x -= x;
-        this.y -= y;
-        this.z -= z;
-
-        return this;
-    }
-
-    public Point3D subtract(Vector3D vector) {
-        this.x -= vector.x;
-        this.y -= vector.y;
-        this.z -= vector.z;
-
-        return this;
-    }
-
 }

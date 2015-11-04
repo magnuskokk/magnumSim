@@ -21,6 +21,9 @@ import com.jogamp.opengl.util.FPSAnimator;
 import model.astronomy.Space;
 import view.Camera;
 
+/**
+ *
+ */
 public class Main implements Config, GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
     private int oldMouseX;
@@ -47,7 +50,6 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
         GLEventListener listener = new Main(animator);
 
-        // I have no idea how these mouselisteners work that way :D
         canvas.addMouseListener((MouseListener) listener);
         canvas.addMouseMotionListener((MouseMotionListener) listener);
         canvas.addMouseWheelListener((MouseWheelListener) listener);
@@ -84,6 +86,10 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         m_animator = animator;
     }
 
+    /**
+     * This method is called in the beginning of rendering
+     * @param drawable Rendering context
+     */
     public void init(GLAutoDrawable drawable) {
         gl = drawable.getGL().getGL2();
         glu = new GLU();
@@ -100,16 +106,6 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glEnable(GL2.GL_LIGHT0);
         gl.glEnable(GL2.GL_LIGHTING);
 
-        // Set material, yellowish
-        float amb[] = {0.3f, 0.3f, 0.0f, 1.0f};
-        float diff[] = {1.0f, 1.0f, 0.5f, 1.0f};
-        float spec[] = {0.6f, 0.6f, 0.5f, 1.0f};
-        float shine = 0.25f;
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT, amb, 0);
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, diff, 0);
-        gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, spec, 0);
-        gl.glMaterialf(GL2.GL_FRONT, GL2.GL_SHININESS, shine * 128.0f);
-
         // smooth the drawing
         gl.glShadeModel(GL2.GL_SMOOTH);
 
@@ -117,8 +113,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glDepthFunc(GL2.GL_LESS);
 
-        // set background to light gray
-        gl.glClearColor(0.9f, 0.9f, 0.9f, 1.0f);
+        // set background to black
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         gl.glEnable(GL2.GL_NORMALIZE);
@@ -127,6 +122,14 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         space = new Space();
     }
 
+    /**
+     * This method is called when the window is resized
+     * @param drawable Rendering context
+     * @param x
+     * @param y
+     * @param width New width
+     * @param height New Height
+     */
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         if (height <= 0) // no divide by zero
         {
@@ -145,6 +148,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     /**
      * This method is called in every frame
+     * @param drawable Rendering context
      */
     public void display(GLAutoDrawable drawable) {
         gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT | GL2.GL_ACCUM_BUFFER_BIT);
@@ -164,9 +168,6 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glFlush();
     }
 
-    public void displayChanged(GLAutoDrawable drawable, boolean modeChanged, boolean deviceChanged) {
-    }
-
     public void mouseClicked(MouseEvent e) {
 
     }
@@ -181,6 +182,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
     }
 
     public void mousePressed(MouseEvent e) {
+        //TODO: this is buggy atm
         if (e.getButton() == MouseEvent.BUTTON3) {
             if (m_animator.isAnimating()) {
                 m_animator.stop();
@@ -192,20 +194,24 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         oldMouseY = e.getY();
     }
 
+    /**
+     * Dragging the mouse rotates the camera
+     * @param e Mouse event
+     */
     public void mouseDragged(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
 
         if (x > oldMouseX) {
-            this.camera.rotate(1, this.dt);
+            this.camera.rotate(1);
         } else {
-            this.camera.rotate(3, this.dt);
+            this.camera.rotate(3);
         }
 
         if (y < oldMouseY) {
-            this.camera.rotate(0, this.dt);
+            this.camera.rotate(0);
         } else {
-            this.camera.rotate(2, this.dt);
+            this.camera.rotate(2);
         }
 
         oldMouseX = e.getX();
@@ -230,6 +236,10 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         // }
     }
 
+    /**
+     * WASD keys are used for movement, QE for camera roll
+     * @param e Key event
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();

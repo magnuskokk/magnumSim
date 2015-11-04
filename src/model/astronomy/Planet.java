@@ -1,21 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model.astronomy;
 
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import main.Main;
 import model.maths.Vector3D;
 import model.physics.PointMass;
 
-/**
- *
- * @author magnus
- */
 public class Planet extends PointMass {
 
     public double radius;
@@ -25,6 +15,14 @@ public class Planet extends PointMass {
     private final float spec[];
     private final float shine;
 
+    /**
+     * Planet constructor
+     * @param mass Mass
+     * @param radius Radius
+     * @param pos Position
+     * @param vel Velocity
+     * @param force Force applied to the planet
+     */
     public Planet(double mass, double radius, Vector3D pos, Vector3D vel, Vector3D force) {
         super(mass, pos, vel, force);
 
@@ -46,6 +44,9 @@ public class Planet extends PointMass {
         this.spec[3] = 1.0f;
     }
 
+    /**
+     * Draw the planet on the screen
+     */
     public void drawOnScreen() {
         GLUquadric glpQ = Main.glu.gluNewQuadric();
 
@@ -64,6 +65,5 @@ public class Planet extends PointMass {
 
         }
         Main.gl.glPopMatrix();
-
     }
 }

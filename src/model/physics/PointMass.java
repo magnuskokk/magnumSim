@@ -11,6 +11,13 @@ public class PointMass {
 
     public int passes;
 
+    /**
+     * Construct a new point mass
+     * @param mass Mass
+     * @param pos Position
+     * @param vel Velocity
+     * @param force Total force applied
+     */
     public PointMass(double mass, Vector3D pos, Vector3D vel, Vector3D force) {
         this.mass = mass;
         this.pos = pos;
@@ -18,20 +25,18 @@ public class PointMass {
         this.force = force;
     }
 
+    /**
+     * Apply force to this mass
+     * @param force Force to be applied
+     */
     public void applyForce(Vector3D force) {
         this.force.add(force);
     }
 
-    // TODO rewrite a new Planet class extending this class
-    public void checkAndFixOutOfBounds() {
-
-        int bounds = 5;
-
-        if (Math.abs(this.pos.x) > bounds || Math.abs(this.pos.y) > bounds || Math.abs(this.pos.z) > bounds) {
-            this.vel.multiply(-1);
-        }
-    }
-
+    /**
+     * Calculate the new velocity and position for this mass
+     * @param dt Time passed since the beginning of frame
+     */
     public void solve(double dt) {
 		// acceleration = force / mass
         // vel += acceleration

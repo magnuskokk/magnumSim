@@ -15,6 +15,9 @@ public class Camera implements Config {
 
     public float zoomLevel = 1;
 
+    /**
+     * Camera constructor
+     */
     public Camera() {
         // Init the camera
         eye = new Point3D(0, 0, 70);
@@ -23,6 +26,9 @@ public class Camera implements Config {
         this.up = new Vector3D(0, 1, 0);
     }
 
+    /**
+     * Set the camera according to settings
+     */
     public void setCamera() {
         // Change to projection matrix.
         Main.gl.glMatrixMode(GL2.GL_PROJECTION);
@@ -30,7 +36,7 @@ public class Camera implements Config {
 
         // Perspective.
         float widthHeightRatio = (float) Config.frameWidth / (float) Config.frameHeight;
-        Main.glu.gluPerspective(45 * this.zoomLevel, widthHeightRatio, 1, 1000);
+        Main.glu.gluPerspective(45.0f * this.zoomLevel, widthHeightRatio, 1, 1000);
         Main.glu.gluLookAt(this.eye.x, this.eye.y, this.eye.z, this.center.x, this.center.y, this.center.z, this.up.x, this.up.y, this.up.z);
 
         // Change back to model view matrix.
@@ -38,14 +44,22 @@ public class Camera implements Config {
         Main.gl.glLoadIdentity();
     }
 
-    public Vector3D getDirVector() {
-        return new Vector3D(this.center, this.eye).toUnitVector();
-    }
-
+    /**
+     * Get the vector that is perpendicular to the camera direction vector and up vector
+     * @return The side vector
+     */
     public Vector3D getSideVector() {
-        return new Vector3D(this.center, this.eye).vektorKorrutis(this.up).toUnitVector();
+        return new Vector3D(this.center, this.eye).crossProduct(this.up).toUnitVector();
     }
 
+    /**
+     * Move camera in the specified direction
+     * @param direction 0 - forward
+     *                  1 - right
+     *                  2 - back
+     *                  3 - left
+     * @param dt Time passed since the beginning of frame
+     */
     public void move(int direction, double dt) {
         switch (direction) {
             case 0: // Move forward
@@ -68,12 +82,19 @@ public class Camera implements Config {
         }
     }
 
-    public void rotate(int direction, double dt) {
+    /**
+     * Rotate the camera in the specified direction
+     * @param direction 0 - up
+     *                  1 - right
+     *                  2 - down
+     *                  3 - left
+     */
+    public void rotate(int direction) {
         Vector3D sideAxis = new Vector3D();
 
         if (direction % 2 == 0) {
             // Rotate up & down, we need the side axis
-            sideAxis = new Vector3D(this.center, this.eye).vektorKorrutis(this.up).toUnitVector();
+            sideAxis = new Vector3D(this.center, this.eye).crossProduct(this.up).toUnitVector();
         }
 
         switch (direction) {
@@ -95,6 +116,11 @@ public class Camera implements Config {
         }
     }
 
+    /**
+     * Roll the camera in the specified direction
+     * @param direction  1 - right
+     *                  -1 - left
+     */
     public void roll(int direction) {
         // We need to rotate the up vector
         Vector3D axis = new Vector3D(this.center, this.eye);
