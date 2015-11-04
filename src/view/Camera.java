@@ -69,19 +69,19 @@ public class Camera implements Config {
 
         switch (direction) {
             case 0: // Rotate up
-                this.center.rotateAround(this.eye, sideAxis, 0.01);
+                this.center.rotateAround(this.eye, sideAxis, Config.cameraRotationAngle);
                 break;
 
             case 1: // Rotate right
-                this.center.rotateAround(this.eye, this.up, -0.01);
+                this.center.rotateAround(this.eye, this.up, -Config.cameraRotationAngle);
                 break;
 
             case 2: // Rotate down
-                this.center.rotateAround(this.eye, sideAxis, -0.01);
+                this.center.rotateAround(this.eye, sideAxis, -Config.cameraRotationAngle);
                 break;
 
             case 3: // Rotate left
-                this.center.rotateAround(this.eye, this.up, 0.01);
+                this.center.rotateAround(this.eye, this.up, Config.cameraRotationAngle);
                 break;
         }
     }
@@ -92,12 +92,12 @@ public class Camera implements Config {
 
         switch (direction) {
             case 1: // Roll to the right
-                this.up.rotateAroundAxis(axis, -0.001);
+                this.up.rotateAroundAxis(axis, -Config.cameraRollAngle);
                 break;
 
 
             case -1: // Roll to the left
-                this.up.rotateAroundAxis(axis, 0.001);
+                this.up.rotateAroundAxis(axis, Config.cameraRollAngle);
                 break;
         }
     }

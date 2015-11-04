@@ -2,14 +2,15 @@ package main;
 
 public interface Config {
 
-    final static int fps = 30;
-    public final static float cameraSpeed = 20.0f;
-    public final static double cameraRotationAngle = 1.0f;
-    public final static double slowMotionRatio = 1;
-    public final static int numPlanets = 200;
+    int fps = 30;
 
-    public final static int frameWidth = 1000;
-    public final static int frameHeight = 700;
+    double slowMotionRatio = 1;
+    int numPlanets = 200;
 
+    int frameWidth = 1000;
+    int frameHeight = 700;
 
+    // Camera settings
+    double cameraRotationAngle = 0.01;
+    double cameraRollAngle = 0.001;
 }
