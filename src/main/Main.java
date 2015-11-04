@@ -1,47 +1,42 @@
 package main;
 
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
-
 import model.astronomy.Space;
 import view.Camera;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  *
  */
 public class Main implements Config, GLEventListener, MouseListener, MouseMotionListener, MouseWheelListener, KeyListener {
 
+    public static Space space;
+    public static GL2 gl;
+    public static GLU glu;
+    // Which keys are currently pressed (to enable "flying")
+    private final Set<Integer> keysPressed = new HashSet<>();
+    public Camera camera = null;
     private int oldMouseX;
     private int oldMouseY;
-
     private FPSAnimator m_animator = null;
-
-    public Camera camera = null;
-
-    public static Space space;
-
     private long time0 = System.nanoTime();
     private double time = 0;
     private double lastTime = 0;
     private double dt = 0;
 
-    public static GL2 gl;
-    public static GLU glu;
+    public Main(FPSAnimator animator) {
+        m_animator = animator;
+    }
 
     public static void main(String[] args) {
         Frame frame = new Frame("Solar system");
@@ -82,12 +77,9 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     }
 
-    public Main(FPSAnimator animator) {
-        m_animator = animator;
-    }
-
     /**
      * This method is called in the beginning of rendering
+     *
      * @param drawable Rendering context
      */
     public void init(GLAutoDrawable drawable) {
@@ -124,11 +116,12 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     /**
      * This method is called when the window is resized
+     *
      * @param drawable Rendering context
      * @param x
      * @param y
-     * @param width New width
-     * @param height New Height
+     * @param width    New width
+     * @param height   New Height
      */
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         if (height <= 0) // no divide by zero
@@ -148,6 +141,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     /**
      * This method is called in every frame
+     *
      * @param drawable Rendering context
      */
     public void display(GLAutoDrawable drawable) {
@@ -155,15 +149,19 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glClearColor(0, 0, 0, 1);
         gl.glLoadIdentity();
 
+        for (Iterator<Integer> i = keysPressed.iterator(); i.hasNext(); ) {
+            this.doActionWhenKeyPressed(i.next());
+        }
+
         this.time = (System.nanoTime() - this.time0) / 1E9; // time in seconds
         // from the
         // beginning
         this.dt = this.time - this.lastTime; // time of last loop
         this.lastTime = this.time;
 
-        this.camera.setCamera();
-
         Main.space.simulate(this.dt / Config.slowMotionRatio);
+
+        this.camera.setCamera();
 
         gl.glFlush();
     }
@@ -196,6 +194,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     /**
      * Dragging the mouse rotates the camera
+     *
      * @param e Mouse event
      */
     public void mouseDragged(MouseEvent e) {
@@ -238,12 +237,22 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
 
     /**
      * WASD keys are used for movement, QE for camera roll
+     *
      * @param e Key event
      */
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
+        keysPressed.add(keyCode);
+
+
+    }
+
+    /**
+     * @param keyCode
+     */
+    public void doActionWhenKeyPressed(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_W:
                 this.camera.move(0, this.dt);
@@ -268,11 +277,29 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
             case KeyEvent.VK_E:
                 this.camera.roll(1);
                 break;
+
+            case KeyEvent.VK_UP:
+                this.camera.rotate(2);
+                break;
+
+            case KeyEvent.VK_RIGHT:
+                this.camera.rotate(1);
+                break;
+
+            case KeyEvent.VK_DOWN:
+                this.camera.rotate(0);
+                break;
+
+            case KeyEvent.VK_LEFT:
+                this.camera.rotate(3);
+                break;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+        keysPressed.remove(e.getKeyCode());
     }
 
     @Override

@@ -8,20 +8,20 @@ import model.physics.PointMass;
 
 public class Planet extends PointMass {
 
-    public double radius;
-
     private final float amb[];
     private final float diff[];
     private final float spec[];
     private final float shine;
+    public double radius;
 
     /**
      * Planet constructor
-     * @param mass Mass
+     *
+     * @param mass   Mass
      * @param radius Radius
-     * @param pos Position
-     * @param vel Velocity
-     * @param force Force applied to the planet
+     * @param pos    Position
+     * @param vel    Velocity
+     * @param force  Force applied to the planet
      */
     public Planet(double mass, double radius, Vector3D pos, Vector3D vel, Vector3D force) {
         super(mass, pos, vel, force);

@@ -35,6 +35,7 @@ public class Point3D {
 
     /**
      * Add a vector to this point (move)
+     *
      * @param vector Vector
      * @return The new point
      */
@@ -48,6 +49,7 @@ public class Point3D {
 
     /**
      * Subtract a vector from this point (move)
+     *
      * @param vector
      * @return The new point
      */
@@ -63,8 +65,9 @@ public class Point3D {
      * Rotates this point about the line through point p with direction vector dir (must be unit vector)
      * by an angle
      * Formula from here: https://sites.google.com/site/glennmurray/Home/rotation-matrices-and-formulas
-     * @param p A point on the rotation axis
-     * @param dir Direction of the rotation axis
+     *
+     * @param p     A point on the rotation axis
+     * @param dir   Direction of the rotation axis
      * @param angle Angle to rotate by
      * @return The new point
      */

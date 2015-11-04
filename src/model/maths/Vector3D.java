@@ -6,6 +6,7 @@ public class Vector3D {
 
     /**
      * Construct by vector coordinates
+     *
      * @param d x-value
      * @param e y-value
      * @param f z-value
@@ -18,7 +19,8 @@ public class Vector3D {
 
     /**
      * Construct by ending and beginning points
-     * @param end Ending point
+     *
+     * @param end   Ending point
      * @param begin Beginning point
      */
     public Vector3D(Point3D end, Point3D begin) {
@@ -45,6 +47,7 @@ public class Vector3D {
 
     /**
      * Multiply vector by a scalar
+     *
      * @param scalar Scalar
      * @return The new vector
      */
@@ -58,6 +61,7 @@ public class Vector3D {
 
     /**
      * Divide vector by a scalar
+     *
      * @param scalar Scalar
      * @return The new vector
      */
@@ -71,6 +75,7 @@ public class Vector3D {
 
     /**
      * Add a vector
+     *
      * @param vector Vector
      * @return The new vector
      */
@@ -84,6 +89,7 @@ public class Vector3D {
 
     /**
      * Get the dot product of 2 vectors
+     *
      * @param vector
      * @return Dot product
      */
@@ -93,6 +99,7 @@ public class Vector3D {
 
     /**
      * Get the cross product of 2 vectors
+     *
      * @param vector
      * @return The new vector
      */
@@ -110,6 +117,7 @@ public class Vector3D {
 
     /**
      * Get the unit vector
+     *
      * @return The unit vector
      */
     public Vector3D getUnitVector() {
@@ -120,6 +128,7 @@ public class Vector3D {
 
     /**
      * Make this vector a unit vector
+     *
      * @return This vector
      */
     public Vector3D toUnitVector() {
@@ -134,6 +143,7 @@ public class Vector3D {
 
     /**
      * Get this vector length
+     *
      * @return Length
      */
     public double length() {
@@ -142,13 +152,14 @@ public class Vector3D {
 
     /**
      * Rotate this vector around an axis vector
-     * @param axis The axis vector
+     *
+     * @param axis  The axis vector
      * @param angle The angle to rotate by
      * @return The new vector
      */
     public Vector3D rotateAroundAxis(Vector3D axis, double angle) {
 
-		// Rodrigues' rotation formula
+        // Rodrigues' rotation formula
         // https://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
         Vector3D copyVector = new Vector3D(this);
         Vector3D liidetav1 = copyVector.multiply(Math.cos(angle));

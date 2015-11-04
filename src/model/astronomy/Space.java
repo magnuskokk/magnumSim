@@ -1,7 +1,6 @@
 package model.astronomy;
 
 import main.Config;
-import model.maths.Point3D;
 import model.maths.Vector3D;
 
 import java.util.Random;
@@ -12,10 +11,8 @@ public class Space implements Config {
     // public float dayofyear = 0f;
     // public float dayofmonth = 10f;
 
-    private Planet[] planets;
-
     static float G = 0.001f; // TODO: change this
-
+    private Planet[] planets;
     // public float[][] colors;
     private int realNumPlanets;
 
@@ -42,24 +39,27 @@ public class Space implements Config {
                 mul = -1;
             }
 
-            Vector3D pos = new Vector3D((float) Math.sin(randomX ^ 2), (float) Math.cos(randomY), (float) randomZ * mul);
-            Vector3D vel = new Vector3D((float) Math.random(), (float) Math.random(), (float) Math.random());
+            Vector3D pos = new Vector3D(Math.sin(randomX ^ 2), -Math.cos(randomY) * mul, Math.cos(randomZ) * mul);
 
             //Vector3D pos = new Vector3D();
-            // Vector3D vel = new Vector3D();
+            Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
-            double massRadius = Math.random();
+            double mass = Math.random();
+            double radius = mass * 0.5;
 
-            this.planets[i] = new Planet(massRadius, massRadius, pos, vel, force);
+            // This is the star
+            if (i == 0) {
+                mass = 3.0;
+                radius = mass * 0.5;
+                pos = new Vector3D();
+            }
+
+            this.planets[i] = new Planet(mass, radius, pos, vel, force);
             this.planets[i].passes = 0;
 
-            // TODO: random colors atm, make some classes orsmth
-            this.planets[i].mass *= 100;
-            this.planets[i].pos.multiply(100);
-            this.planets[i].vel.multiply(5);
-            //  this.planets[i].pos.multiply(10);
-
+            // Make planets further from each other
+            this.planets[i].pos.multiply(15);
         }
 
     }
@@ -67,6 +67,7 @@ public class Space implements Config {
     /**
      * This method is called from <code>Main.display()</code> every frame.
      * It iterates through all planets and calculates the forces applied to them
+     *
      * @param dt Time passed since the last frame
      */
     public void simulate(double dt) {
@@ -186,7 +187,7 @@ public class Space implements Config {
         }
 
 
-     //   Point3D heaviestPlanetPos = this.getHeaviestPlanet();
+        //   Point3D heaviestPlanetPos = this.getHeaviestPlanet();
 
         //System.out.println(heaviestPlanetPos.x);
 

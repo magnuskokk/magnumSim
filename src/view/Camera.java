@@ -46,6 +46,7 @@ public class Camera implements Config {
 
     /**
      * Get the vector that is perpendicular to the camera direction vector and up vector
+     *
      * @return The side vector
      */
     public Vector3D getSideVector() {
@@ -54,16 +55,17 @@ public class Camera implements Config {
 
     /**
      * Move camera in the specified direction
+     *
      * @param direction 0 - forward
      *                  1 - right
      *                  2 - back
      *                  3 - left
-     * @param dt Time passed since the beginning of frame
+     * @param dt        Time passed since the beginning of frame
      */
     public void move(int direction, double dt) {
         switch (direction) {
             case 0: // Move forward
-                this.zoomLevel *= 0.9f;
+                this.zoomLevel *= 0.99f;
                 break;
 
             case 1: // Move right
@@ -72,7 +74,7 @@ public class Camera implements Config {
                 break;
 
             case 2: // Move back
-                this.zoomLevel *= 1.1f;
+                this.zoomLevel *= 1.01f;
                 break;
 
             case 3: // Move left
@@ -84,6 +86,7 @@ public class Camera implements Config {
 
     /**
      * Rotate the camera in the specified direction
+     *
      * @param direction 0 - up
      *                  1 - right
      *                  2 - down
@@ -118,7 +121,8 @@ public class Camera implements Config {
 
     /**
      * Roll the camera in the specified direction
-     * @param direction  1 - right
+     *
+     * @param direction 1 - right
      *                  -1 - left
      */
     public void roll(int direction) {
