@@ -1,4 +1,4 @@
-package main;
+package eu.kokk;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -6,8 +6,8 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.FPSAnimator;
-import model.astronomy.Space;
-import view.Camera;
+import eu.kokk.model.astronomy.Space;
+import eu.kokk.view.Camera;
 
 import java.awt.*;
 import java.awt.event.*;

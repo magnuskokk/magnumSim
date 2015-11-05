@@ -1,4 +1,4 @@
-package model.maths;
+package eu.kokk.model.maths;
 
 public class Vector3D {
 

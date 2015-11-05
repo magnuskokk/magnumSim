@@ -1,10 +1,10 @@
-package view;
+package eu.kokk.view;
 
 import com.jogamp.opengl.GL2;
-import main.Config;
-import main.Main;
-import model.maths.Point3D;
-import model.maths.Vector3D;
+import eu.kokk.Config;
+import eu.kokk.Main;
+import eu.kokk.model.maths.Point3D;
+import eu.kokk.model.maths.Vector3D;
 
 public class Camera implements Config {
 

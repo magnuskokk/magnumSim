@@ -1,4 +1,4 @@
-package model.maths;
+package eu.kokk.model.maths;
 
 public class Point3D {
 

@@ -1,7 +1,7 @@
-package model.astronomy;
+package eu.kokk.model.astronomy;
 
-import main.Config;
-import model.maths.Vector3D;
+import eu.kokk.Config;
+import eu.kokk.model.maths.Vector3D;
 
 import java.util.Random;
 
@@ -12,7 +12,6 @@ public class Space implements Config {
     // public float dayofmonth = 10f;
 
     public static Vector3D moveVector;
-    static float G = 0.001f; // TODO: change this
     private Planet[] planets;
     // public float[][] colors;
     private int realNumPlanets;
@@ -42,27 +41,36 @@ public class Space implements Config {
             }
 
             Vector3D pos = new Vector3D(Math.sin(randomX ^ 2), -Math.cos(randomY) * mul, Math.cos(randomZ) * mul);
-            Vector3D vel = new Vector3D(Math.cos(Math.pow(randomX, 2 * mul)), -Math.sin(randomY) * mul, Math.tan(randomZ));
+            Vector3D vel = new Vector3D(Math.cos(Math.pow(randomX, 2 * mul)), -Math.sin(randomY) * mul, Math.sin(randomZ));
 
+            
             //Vector3D pos = new Vector3D();
             // Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
-            double mass = Math.random();
-            double radius = mass * 0.5;
+            double mass = Math.random()*10;
+            double radius = mass * 0.05;
 
+                 
+            if (i%15 == 0) {
+                mass = Math.random()*1000.0;
+                radius = mass/600.0;
+                
+            }
             // This is the star
             if (i == 0) {
-                mass = 2.0;
-                radius = mass * 0.3;
+                mass = 10000.0;
+               // mass = 1.989E10;
+
+                radius = 1;
                 pos = new Vector3D();
             }
-
+       
+            pos.multiply(30);
+            vel.multiply(30);
+            
             this.planets[i] = new Planet(mass, radius, pos, vel, force);
             this.planets[i].passes = 0;
-
-            // Make planets further from each other
-            this.planets[i].pos.multiply(15);
         }
 
     }
@@ -94,8 +102,9 @@ public class Space implements Config {
 
                         Vector3D distanceVector = new Vector3D(distanceVectorX, distanceVectorY, distanceVectorZ);
 
-                        double forceBetween = (G * this.planets[i].mass * this.planets[j].mass)
+                        double forceBetween = (Config.G * this.planets[i].mass * this.planets[j].mass)
                                 / (Math.pow(distanceVector.length(), 2));
+                        
 
                         Vector3D unitVector = distanceVector.getUnitVector();
 

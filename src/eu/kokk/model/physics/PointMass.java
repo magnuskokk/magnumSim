@@ -1,6 +1,6 @@
-package model.physics;
+package eu.kokk.model.physics;
 
-import model.maths.Vector3D;
+import eu.kokk.model.maths.Vector3D;
 
 public class PointMass {
 

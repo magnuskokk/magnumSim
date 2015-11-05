@@ -1,10 +1,10 @@
-package model.astronomy;
+package eu.kokk.model.astronomy;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLUquadric;
-import main.Main;
-import model.maths.Vector3D;
-import model.physics.PointMass;
+import eu.kokk.Main;
+import eu.kokk.model.maths.Vector3D;
+import eu.kokk.model.physics.PointMass;
 
 public class Planet extends PointMass {
 
