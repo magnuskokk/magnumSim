@@ -53,13 +53,13 @@ public class Space implements Config {
 
                  
             if (i%15 == 0) {
-                mass = Math.random()*1000.0;
+                mass = Math.random()*1500.0;
                 radius = mass/600.0;
                 
             }
             // This is the star
             if (i == 0) {
-                mass = 10000.0;
+                mass = 30000.0;
                // mass = 1.989E10;
 
                 radius = 1;
