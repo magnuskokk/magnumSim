@@ -43,6 +43,21 @@ public class Planet extends PointMass {
         this.diff[3] = 1.0f;
         this.spec[3] = 1.0f;
     }
+    
+    /**
+     * This method solves a collision. It returns the argument it was passed
+     * but with new velocity. It also changes this velocity
+     * @param planet
+     * @return 
+     */
+   /* public Planet solveCollision(Planet planet) {
+        // We need to calculate the new velocity vectors for both planets
+        
+        
+        
+        
+        
+    }*/
 
     /**
      * Draw the planet on the screen
@@ -61,7 +76,7 @@ public class Planet extends PointMass {
             Main.gl.glColor4f(1f, 1f, 1f, 1f);
             Main.gl.glTranslated(this.pos.x, this.pos.y, this.pos.z);
 
-            Main.glu.gluSphere(glpQ, this.radius, 10, 10);
+            Main.glu.gluSphere(glpQ, this.radius, 20, 20);
 
         }
         Main.gl.glPopMatrix();

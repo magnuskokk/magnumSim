@@ -102,10 +102,10 @@ public class Space implements Config {
 
                         Vector3D distanceVector = new Vector3D(distanceVectorX, distanceVectorY, distanceVectorZ);
 
+                        // Calculate the gravitational force between 2 point masses
                         double forceBetween = (Config.G * this.planets[i].mass * this.planets[j].mass)
                                 / (Math.pow(distanceVector.length(), 2));
                         
-
                         Vector3D unitVector = distanceVector.getUnitVector();
 
                         // if the planets are far enough (not side by side)
@@ -117,77 +117,9 @@ public class Space implements Config {
 
                                 this.planets[i].solve(dt);
                             }
-                        } else {
-
-                            //System.out.println("coll");
-
-                            //TODO write methods
-                            //Below comment merges planets as they touch
-                        /*    this.planets[i].mass += this.planets[j].mass;
-                            Vector3D pos1 = new Vector3D(this.planets[i].pos);
-                            Vector3D pos2 = new Vector3D(this.planets[j].pos);
-
-                            pos1.multiply(this.planets[i].mass);
-                            pos2.multiply(this.planets[j].mass);
-
-                            this.planets[i].pos = pos1.add(pos2).divide(this.planets[i].mass + this.planets[j].mass);
-                            this.planets[i].vel.add(this.planets[j].vel);
-                            this.planets[i].radius += this.planets[j].radius;
-                            this.planets[i].mass += this.planets[j].mass;
-
-                            if (this.realNumPlanets > 1) {
-                                this.realNumPlanets--;
-                            }
-                            for (int k = j; k < this.planets.length - 1; k++) {
-
-                                 this.planets[k] = this.planets[k + 1];
-                            }*/
-
-                            // we have a collision
-                            // va1 = ( v1 * (m1 - m2) + 2 * m2 * v2 ) / ( m1 + m2 )
-                            ////
-                            //
-                            // planets[i].force.multiply(-1);
-                            // planets[j].force.multiply(-1);
-                            // v1f = −v1i + 2(m1 v1i + m2 v2i)
-                            // m1 + m2
-                            // (1)
-                            //
-                            // Vector3D v1 = new Vector3D(planets[i].vel);
-                            // Vector3D v2 = new Vector3D(planets[j].vel);
-                            //
-                            //
-                            // Vector3D murd1 = v1.multiply(planets[i].mass);
-                            // murd1.add(v2.multiply(planets[j].mass));
-                            // murd1.multiply(2);
-                            // murd1.divide(planets[i].mass + planets[j].mass);
-                            //
-                            // v1 = new Vector3D(planets[i].vel);
-                            // v1.multiply(-1);
-                            //
-                            // v2 = new Vector3D(planets[j].vel);
-                            // v2.multiply(-1);
-                            // Vector3D changedVel1 = v1.add(murd1);
-                            // Vector3D changedVel2 = v2.add(murd1);
-                            //
-                            // System.out.println(changedVel1.x);
-                            //
-                            //
-                            // planets[i].vel = changedVel1;
-                            // planets[j].vel = changedVel2;
-                            // this.planets[j].solve(dt);
-                            // v2f = −v2i + 2(m1 v1i + m2 v2i)
-                            // m1 + m2
-                            //
-                            //
-                            //
-                            //
-                            //
-                            //
-                            //
+                        } else { // shit we have a collision
+                           // this.planets[i].solveCollision(this.planets[j]);
                         }
-
-
                     }
                 }
             }
@@ -204,7 +136,7 @@ public class Space implements Config {
         // Camera.center = planets[0].pos.toPoint();
         // Camera.eye = new Point3D(0.0, 0.0, Camera.center.z + 70.0);
     }
-
+    
     /**
      * @return The position of the heaviest planet
      */
