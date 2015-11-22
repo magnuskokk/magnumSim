@@ -8,10 +8,10 @@ import eu.kokk.model.maths.Vector3D;
 
 public class Camera implements Config {
 
-    public static Point3D eye;
-    public static Point3D center;
+    public Point3D eye;
+    public Point3D center;
 
-    public static Vector3D up;
+    public Vector3D up;
 
     public float zoomLevel = 1;
 
@@ -20,8 +20,8 @@ public class Camera implements Config {
      */
     public Camera() {
         // Init the camera
-        eye = new Point3D(0, 0, 70);
-        center = new Point3D();
+        this.eye = new Point3D(0, 0, 70);
+        this.center = new Point3D();
 
         this.up = new Vector3D(0, 1, 0);
     }
@@ -50,7 +50,7 @@ public class Camera implements Config {
      * @return The side vector
      */
     public Vector3D getSideVector() {
-        return new Vector3D(this.center, this.eye).crossProduct(this.up).toUnitVector();
+        return new Vector3D(this.center, this.eye).crossProduct(this.up).normalize();
     }
 
     /**
@@ -69,8 +69,8 @@ public class Camera implements Config {
                 break;
 
             case 1: // Move right
-                this.center.add(this.getSideVector());
-                this.eye.add(this.getSideVector());
+                this.center = this.center.add(this.getSideVector());
+                this.eye = this.eye.add(this.getSideVector());
                 break;
 
             case 2: // Move back
@@ -78,8 +78,8 @@ public class Camera implements Config {
                 break;
 
             case 3: // Move left
-                this.center.subtract(this.getSideVector());
-                this.eye.subtract(this.getSideVector());
+                this.center = this.center.subtract(this.getSideVector());
+                this.eye = this.eye.subtract(this.getSideVector());
                 break;
         }
     }
@@ -97,24 +97,24 @@ public class Camera implements Config {
 
         if (direction % 2 == 0) {
             // Rotate up & down, we need the side axis
-            sideAxis = new Vector3D(this.center, this.eye).crossProduct(this.up).toUnitVector();
+            sideAxis = this.getSideVector();
         }
 
         switch (direction) {
             case 0: // Rotate up
-                this.center.rotateAround(this.eye, sideAxis, Config.cameraRotationAngle);
+                this.center = this.center.rotateAround(this.eye, sideAxis, Config.cameraRotationAngle);
                 break;
 
             case 1: // Rotate right
-                this.center.rotateAround(this.eye, this.up, -Config.cameraRotationAngle);
+                this.center = this.center.rotateAround(this.eye, this.up, -Config.cameraRotationAngle);
                 break;
 
             case 2: // Rotate down
-                this.center.rotateAround(this.eye, sideAxis, -Config.cameraRotationAngle);
+                this.center = this.center.rotateAround(this.eye, sideAxis, -Config.cameraRotationAngle);
                 break;
 
             case 3: // Rotate left
-                this.center.rotateAround(this.eye, this.up, Config.cameraRotationAngle);
+                this.center = this.center.rotateAround(this.eye, this.up, Config.cameraRotationAngle);
                 break;
         }
     }
@@ -131,12 +131,12 @@ public class Camera implements Config {
 
         switch (direction) {
             case 1: // Roll to the right
-                this.up.rotateAroundAxis(axis, -Config.cameraRollAngle);
+                this.up = this.up.rotateAroundAxis(axis, -Config.cameraRollAngle);
                 break;
 
 
             case -1: // Roll to the left
-                this.up.rotateAroundAxis(axis, Config.cameraRollAngle);
+                this.up = this.up.rotateAroundAxis(axis, Config.cameraRollAngle);
                 break;
         }
     }

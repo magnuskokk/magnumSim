@@ -41,11 +41,13 @@ public class Point3D {
      * @return The new point
      */
     public Point3D add(Vector3D vector) {
-        this.x += vector.x;
-        this.y += vector.y;
-        this.z += vector.z;
+        Point3D temp = new Point3D(this);
+        
+        temp.x += vector.x;
+        temp.y += vector.y;
+        temp.z += vector.z;
 
-        return this;
+        return temp;
     }
 
     /**
@@ -55,11 +57,13 @@ public class Point3D {
      * @return The new point
      */
     public Point3D subtract(Vector3D vector) {
-        this.x -= vector.x;
-        this.y -= vector.y;
-        this.z -= vector.z;
+        Point3D temp = new Point3D(this);
 
-        return this;
+        temp.x -= vector.x;
+        temp.y -= vector.y;
+        temp.z -= vector.z;
+
+        return temp;
     }
 
     /**
@@ -99,10 +103,6 @@ public class Point3D {
                 + this.z * angleCos
                 + (-b * u + a * v - v * this.x + u * this.y) * angleSin;
 
-        this.x = newX;
-        this.y = newY;
-        this.z = newZ;
-
-        return this;
+        return new Point3D(newX, newY, newZ);
     }
 }

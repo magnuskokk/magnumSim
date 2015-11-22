@@ -32,7 +32,7 @@ public class PointMass {
      * @param force Force to be applied
      */
     public void applyForce(Vector3D force) {
-        this.force.add(force);
+        this.force = this.force.add(force);
     }
 
     /**
@@ -49,11 +49,11 @@ public class PointMass {
         // acceleration.multiply((float) fps);
         Vector3D currentForce = new Vector3D(this.force);
         Vector3D acceleration = currentForce.divide(this.mass);
-        this.vel.add(acceleration);
+        this.vel = this.vel.add(acceleration);
 
-        this.vel.multiply(dt);
+        this.vel = this.vel.multiply(dt);
 
-        this.pos.add(this.vel);
+        this.pos = this.pos.add(this.vel);
 
         // pos += vel
     }

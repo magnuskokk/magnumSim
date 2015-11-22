@@ -2,6 +2,7 @@ package eu.kokk.model.astronomy;
 
 import eu.kokk.Config;
 import eu.kokk.model.maths.Vector3D;
+import eu.kokk.model.simulation.Collision;
 
 import java.util.Random;
 
@@ -54,20 +55,23 @@ public class Space implements Config {
                  
             if (i%15 == 0) {
                 mass = Math.random()*1500.0;
-                radius = mass/600.0;
+                radius = mass/1000.0;
                 
             }
             // This is the star
             if (i == 0) {
-                mass = 30000.0;
+                mass = 3000.0;
                // mass = 1.989E10;
 
-                radius = 1;
+                radius = mass/1000.0;
                 pos = new Vector3D();
+                vel = new Vector3D();
+            } else {
+                pos = pos.multiply(30);
+                vel = vel.multiply(30);
             }
        
-            pos.multiply(30);
-            vel.multiply(30);
+        
             
             this.planets[i] = new Planet(mass, radius, pos, vel, force);
             this.planets[i].passes = 0;
@@ -87,51 +91,40 @@ public class Space implements Config {
          * their new position and velocity vectors according to the force
          * applied to them
          */
+        
+        
+        for (int i = 0; i < this.planets.length; i++) {
+            for (int j = i + 1; j < this.planets.length; j++) {
+                Vector3D distanceVector = this.planets[j].pos.subtract(this.planets[i].pos);
 
-        for (int i = 0; i < this.realNumPlanets; i++) {
+                // Calculate the gravitational force between 2 point masses
+                double forceBetween = (Config.G * this.planets[i].mass * this.planets[j].mass)
+                        / (Math.pow(distanceVector.length(), 2));
 
-            if (this.planets[i] != null) {
+                // if the planets are far enough (not side by side)
+                if (distanceVector.length() > (this.planets[i].radius + this.planets[j].radius)) {
+                    Vector3D forceVector = distanceVector.getUnitVector().multiply(forceBetween);
 
-                // Find all gravitational forces which attract a single planet
-                for (int j = 0; j < this.realNumPlanets; j++) {
-                    if (i != j && this.planets[j] != null) {
+                    this.planets[i].applyForce(forceVector);
+                    this.planets[j].applyForce(forceVector.multiply(-1));
+                } else { // shit we have a collision
+                   // System.out.println("COLL");
 
-                        double distanceVectorX = this.planets[j].pos.x - this.planets[i].pos.x;
-                        double distanceVectorY = this.planets[j].pos.y - this.planets[i].pos.y;
-                        double distanceVectorZ = this.planets[j].pos.z - this.planets[i].pos.z;
-
-                        Vector3D distanceVector = new Vector3D(distanceVectorX, distanceVectorY, distanceVectorZ);
-
-                        // Calculate the gravitational force between 2 point masses
-                        double forceBetween = (Config.G * this.planets[i].mass * this.planets[j].mass)
-                                / (Math.pow(distanceVector.length(), 2));
-                        
-                        Vector3D unitVector = distanceVector.getUnitVector();
-
-                        // if the planets are far enough (not side by side)
-                        if (distanceVector.length() > (this.planets[i].radius + this.planets[j].radius)) {
-                            Vector3D forceVector = unitVector.multiply(forceBetween);
-
-                            if (i != 0) {
-                                planets[i].applyForce(forceVector);
-
-                                this.planets[i].solve(dt);
-                            }
-                        } else { // shit we have a collision
-                           // this.planets[i].solveCollision(this.planets[j]);
-                        }
-                    }
+                    Collision collision = new Collision(this.planets[i], this.planets[j]);
+                    this.planets[i].vel = collision.getResultVel1();
+                    this.planets[j].vel = collision.getResultVel2();
                 }
+                
+                this.planets[i].solve(dt);
+                this.planets[j].solve(dt);
+
             }
         }
 
         // Here the calculations are made, time to draw to the screen
-        for (int i = 0; i < this.realNumPlanets; i++) {
-            if (this.planets[i] != null) {
-                this.planets[i].drawOnScreen();
-            }
+        for (Planet planet : this.planets) {
+            planet.drawOnScreen();
         }
-
         // Set the center back to the star
         // Camera.center = planets[0].pos.toPoint();
         // Camera.eye = new Point3D(0.0, 0.0, Camera.center.z + 70.0);
@@ -170,8 +163,8 @@ public class Space implements Config {
 
                 Vector3D pos = new Vector3D(this.planets[i].pos);
 
-                pos.multiply(this.planets[i].mass);
-                allPos.add(pos);
+                pos = pos.multiply(this.planets[i].mass);
+                allPos = allPos.add(pos);
             }
 
         }
