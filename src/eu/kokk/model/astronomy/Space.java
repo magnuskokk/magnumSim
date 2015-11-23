@@ -48,7 +48,7 @@ public class Space implements Config {
             // Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
-            double mass = Math.random() * 1000;
+            double mass = Math.random() * 750;
             double radius = mass / 1000.0;
 
             // This is the star

@@ -2,13 +2,13 @@ package eu.kokk;
 
 public interface Config {
 
-    int fps = 60;
+    int fps = 30;
 
     double speedPercent = 100;
     int numPlanets = 50;
 
-    int frameWidth = 1000;
-    int frameHeight = 700;
+    int frameWidth = 1280;
+    int frameHeight = 720;
 
     // Camera settings
     double cameraRotationAngle = 0.01;
