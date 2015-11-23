@@ -45,7 +45,8 @@ public class Camera implements Config {
     }
 
     /**
-     * Get the vector that is perpendicular to the camera direction vector and up vector
+     * Get the vector that is perpendicular to the camera direction vector and
+     * up vector
      *
      * @return The side vector
      */
@@ -56,11 +57,8 @@ public class Camera implements Config {
     /**
      * Move camera in the specified direction
      *
-     * @param direction 0 - forward
-     *                  1 - right
-     *                  2 - back
-     *                  3 - left
-     * @param dt        Time passed since the beginning of frame
+     * @param direction 0 - forward 1 - right 2 - back 3 - left
+     * @param dt Time passed since the beginning of frame
      */
     public void move(int direction, double dt) {
         switch (direction) {
@@ -87,10 +85,7 @@ public class Camera implements Config {
     /**
      * Rotate the camera in the specified direction
      *
-     * @param direction 0 - up
-     *                  1 - right
-     *                  2 - down
-     *                  3 - left
+     * @param direction 0 - up 1 - right 2 - down 3 - left
      */
     public void rotate(int direction) {
         Vector3D sideAxis = new Vector3D();
@@ -122,8 +117,7 @@ public class Camera implements Config {
     /**
      * Roll the camera in the specified direction
      *
-     * @param direction 1 - right
-     *                  -1 - left
+     * @param direction 1 - right -1 - left
      */
     public void roll(int direction) {
         // We need to rotate the up vector
@@ -133,7 +127,6 @@ public class Camera implements Config {
             case 1: // Roll to the right
                 this.up = this.up.rotateAroundAxis(axis, -Config.cameraRollAngle);
                 break;
-
 
             case -1: // Roll to the left
                 this.up = this.up.rotateAroundAxis(axis, Config.cameraRollAngle);

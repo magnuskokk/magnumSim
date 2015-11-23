@@ -5,7 +5,7 @@ import eu.kokk.model.maths.Vector3D;
 
 public class Collision {
 
-    private final Vector3D resultVel1, resultVel2;
+    private Vector3D resultVel1, resultVel2;
 
     public Collision(Planet planet1, Planet planet2) {
 

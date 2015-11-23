@@ -44,35 +44,26 @@ public class Space implements Config {
             Vector3D pos = new Vector3D(Math.sin(randomX ^ 2), -Math.cos(randomY) * mul, Math.cos(randomZ) * mul);
             Vector3D vel = new Vector3D(Math.cos(Math.pow(randomX, 2 * mul)), -Math.sin(randomY) * mul, Math.sin(randomZ));
 
-            
             //Vector3D pos = new Vector3D();
             // Vector3D vel = new Vector3D();
             Vector3D force = new Vector3D();
 
-            double mass = Math.random()*10;
-            double radius = mass * 0.05;
+            double mass = Math.random() * 1000;
+            double radius = mass / 1000.0;
 
-                 
-            if (i%15 == 0) {
-                mass = Math.random()*1500.0;
-                radius = mass/1000.0;
-                
-            }
             // This is the star
             if (i == 0) {
-                mass = 3000.0;
-               // mass = 1.989E10;
+                mass = 2000.0;
+                // mass = 1.989E10;
 
-                radius = mass/1000.0;
+                radius = mass / 1000.0;
                 pos = new Vector3D();
                 vel = new Vector3D();
             } else {
                 pos = pos.multiply(30);
                 vel = vel.multiply(30);
             }
-       
-        
-            
+
             this.planets[i] = new Planet(mass, radius, pos, vel, force);
             this.planets[i].passes = 0;
         }
@@ -80,8 +71,8 @@ public class Space implements Config {
     }
 
     /**
-     * This method is called from <code>Main.display()</code> every frame.
-     * It iterates through all planets and calculates the forces applied to them
+     * This method is called from <code>Main.display()</code> every frame. It
+     * iterates through all planets and calculates the forces applied to them
      *
      * @param dt Time passed since the last frame
      */
@@ -91,8 +82,7 @@ public class Space implements Config {
          * their new position and velocity vectors according to the force
          * applied to them
          */
-        
-        
+
         for (int i = 0; i < this.planets.length; i++) {
             for (int j = i + 1; j < this.planets.length; j++) {
                 Vector3D distanceVector = this.planets[j].pos.subtract(this.planets[i].pos);
@@ -108,16 +98,20 @@ public class Space implements Config {
                     this.planets[i].applyForce(forceVector);
                     this.planets[j].applyForce(forceVector.multiply(-1));
                 } else { // shit we have a collision
-                   // System.out.println("COLL");
+                    //System.out.println("COLL");
 
-                    Collision collision = new Collision(this.planets[i], this.planets[j]);
-                    this.planets[i].vel = collision.getResultVel1();
-                    this.planets[j].vel = collision.getResultVel2();
+                    //Collision collision = new Collision(this.planets[i], this.planets[j]);
+                    // TODO: doesn't work yet
+                    //this.planets[i].vel = collision.getResultVel1();
+                    //this.planets[j].vel = collision.getResultVel2();
                 }
-                
-                this.planets[i].solve(dt);
-                this.planets[j].solve(dt);
 
+                // Keep the sun still for convenience
+                if (i != 0) {
+                    this.planets[i].solve(dt);
+                }
+
+                this.planets[j].solve(dt);
             }
         }
 
@@ -129,7 +123,7 @@ public class Space implements Config {
         // Camera.center = planets[0].pos.toPoint();
         // Camera.eye = new Point3D(0.0, 0.0, Camera.center.z + 70.0);
     }
-    
+
     /**
      * @return The position of the heaviest planet
      */
@@ -137,13 +131,11 @@ public class Space implements Config {
         double mass = 0;
         Vector3D pos = null;
 
-
         for (int i = 0; i < this.realNumPlanets; i++) {
             if (this.planets[i].mass > mass) {
                 mass = this.planets[i].mass;
                 pos = new Vector3D(this.planets[i].pos);
             }
-
         }
 
         return pos;

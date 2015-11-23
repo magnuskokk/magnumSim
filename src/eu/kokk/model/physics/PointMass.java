@@ -14,9 +14,9 @@ public class PointMass {
     /**
      * Construct a new point mass
      *
-     * @param mass  Mass
-     * @param pos   Position
-     * @param vel   Velocity
+     * @param mass Mass
+     * @param pos Position
+     * @param vel Velocity
      * @param force Total force applied
      */
     public PointMass(double mass, Vector3D pos, Vector3D vel, Vector3D force) {
@@ -47,8 +47,7 @@ public class PointMass {
         // Reference the force, we only need to calculate the position and
         // velocity
         // acceleration.multiply((float) fps);
-        Vector3D currentForce = new Vector3D(this.force);
-        Vector3D acceleration = currentForce.divide(this.mass);
+        Vector3D acceleration = this.force.divide(this.mass);
         this.vel = this.vel.add(acceleration);
 
         this.vel = this.vel.multiply(dt);

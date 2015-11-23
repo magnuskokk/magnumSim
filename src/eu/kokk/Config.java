@@ -5,7 +5,7 @@ public interface Config {
     int fps = 60;
 
     double speedPercent = 100;
-    int numPlanets = 100;
+    int numPlanets = 50;
 
     int frameWidth = 1000;
     int frameHeight = 700;
@@ -13,9 +13,8 @@ public interface Config {
     // Camera settings
     double cameraRotationAngle = 0.01;
     double cameraRollAngle = 0.0002;
-    
+
     // Physics
     //double G = 6.674E-11; // This is the real value
-    double G = 6.67E-6; // G*100000
-
+    double G = 6.67E-5; // G*10000000
 }

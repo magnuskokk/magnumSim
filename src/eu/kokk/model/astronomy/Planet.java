@@ -17,11 +17,11 @@ public class Planet extends PointMass {
     /**
      * Planet constructor
      *
-     * @param mass   Mass
+     * @param mass Mass
      * @param radius Radius
-     * @param pos    Position
-     * @param vel    Velocity
-     * @param force  Force applied to the planet
+     * @param pos Position
+     * @param vel Velocity
+     * @param force Force applied to the planet
      */
     public Planet(double mass, double radius, Vector3D pos, Vector3D vel, Vector3D force) {
         super(mass, pos, vel, force);
@@ -43,21 +43,6 @@ public class Planet extends PointMass {
         this.diff[3] = 1.0f;
         this.spec[3] = 1.0f;
     }
-    
-    /**
-     * This method solves a collision. It returns the argument it was passed
-     * but with new velocity. It also changes this velocity
-     * @param planet
-     * @return 
-     */
-   /* public Planet solveCollision(Planet planet) {
-        // We need to calculate the new velocity vectors for both planets
-        
-        
-        
-        
-        
-    }*/
 
     /**
      * Draw the planet on the screen

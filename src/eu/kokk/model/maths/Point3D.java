@@ -42,7 +42,7 @@ public class Point3D {
      */
     public Point3D add(Vector3D vector) {
         Point3D temp = new Point3D(this);
-        
+
         temp.x += vector.x;
         temp.y += vector.y;
         temp.z += vector.z;
@@ -67,12 +67,12 @@ public class Point3D {
     }
 
     /**
-     * Rotates this point about the line through point p with direction vector dir (must be unit vector)
-     * by an angle
-     * Formula from here: https://sites.google.com/site/glennmurray/Home/rotation-matrices-and-formulas
+     * Rotates this point about the line through point p with direction vector
+     * dir (must be unit vector) by an angle Formula from here:
+     * https://sites.google.com/site/glennmurray/Home/rotation-matrices-and-formulas
      *
-     * @param p     A point on the rotation axis
-     * @param dir   Direction of the rotation axis
+     * @param p A point on the rotation axis
+     * @param dir Direction of the rotation axis
      * @param angle Angle to rotate by
      * @return The new point
      */

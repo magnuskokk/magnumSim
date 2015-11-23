@@ -120,8 +120,8 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
      * @param drawable Rendering context
      * @param x
      * @param y
-     * @param width    New width
-     * @param height   New Height
+     * @param width New width
+     * @param height New Height
      */
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         if (height <= 0) // no divide by zero
@@ -149,7 +149,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         gl.glClearColor(0, 0, 0, 1);
         gl.glLoadIdentity();
 
-        for (Iterator<Integer> i = keysPressed.iterator(); i.hasNext(); ) {
+        for (Iterator<Integer> i = keysPressed.iterator(); i.hasNext();) {
             this.doActionWhenKeyPressed(i.next());
         }
 
@@ -159,7 +159,7 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         this.dt = this.time - this.lastTime; // time of last loop
         this.lastTime = this.time;
 
-        Main.space.simulate(this.dt * Config.speedPercent/100);
+        Main.space.simulate(this.dt * Config.speedPercent / 100);
 
         this.camera.setCamera();
 
@@ -245,7 +245,6 @@ public class Main implements Config, GLEventListener, MouseListener, MouseMotion
         int keyCode = e.getKeyCode();
 
         keysPressed.add(keyCode);
-
 
     }
 
